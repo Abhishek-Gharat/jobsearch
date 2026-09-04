@@ -1,0 +1,19 @@
+{
+  "gmail_address": "your.email@example.com",
+  "gmail_app_password": "YOUR_GMAIL_APP_PASSWORD",
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "imap_host": "imap.gmail.com",
+  "imap_port": 993,
+  "sender_name": "Your Name",
+  "sender_phone": "+91 98XXXXXXXX",
+  "sender_email_fallback": "your.email@example.com",
+  "sender_linkedin": "https://www.linkedin.com/in/your-profile/",
+  "sender_github": "https://github.com/your-username/",
+  "sender_portfolio": "https://your-portfolio.example.com/",
+  "resume_files": {
+    "default": "<PROJECT_ROOT>/Resume.pdf"
+  },
+  "daily_send_limit": 12,
+  "min_gap_between_sends_sec": 240
+}

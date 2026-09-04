@@ -1,0 +1,118 @@
+{
+  "name": "kilo-bridge",
+  "displayName": "Kilo Bridge",
+  "description": "Local HTTP bridge that lets the Job Control Center trigger Kilo Code tasks automatically without mouse clicks or keyboard simulation.",
+  "version": "1.0.0",
+  "publisher": "local",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "kilo",
+    "kilocode",
+    "bridge",
+    "automation",
+    "job",
+    "control-center"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:kilobridge.runTask",
+    "onCommand:kilobridge.showLog"
+  ],
+  "main": "./extension.js",
+  "scripts": {
+    "check": "node --check extension.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "kilobridge.runTask",
+        "title": "Run Task (Kilo Bridge)",
+        "category": "Kilo Bridge"
+      },
+      {
+        "command": "kilobridge.showLog",
+        "title": "Show Log (Kilo Bridge)",
+        "category": "Kilo Bridge"
+      }
+    ],
+    "configuration": {
+      "title": "Kilo Bridge",
+      "properties": {
+        "kilobridge.host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Address the bridge HTTP server binds to."
+        },
+        "kilobridge.port": {
+          "type": "number",
+          "default": 3011,
+          "description": "Port the bridge HTTP server listens on."
+        },
+        "kilobridge.focusViewCommand": {
+          "type": "string",
+          "default": "kilo-code.SidebarProvider.focus",
+          "description": "VS Code command that reveals the Kilo Code chat view."
+        },
+        "kilobridge.newTaskCommand": {
+          "type": "string",
+          "default": "kilo-code.new.plusButtonClicked",
+          "description": "VS Code command that starts a new Kilo task (resets the chat)."
+        },
+        "kilobridge.focusInputCommand": {
+          "type": "string",
+          "default": "kilo-code.new.focusChatInput",
+          "description": "VS Code command that focuses the Kilo chat input."
+        },
+        "kilobridge.verifyMs": {
+          "type": "number",
+          "default": 15000,
+          "description": "Milliseconds the bridge waits for the prompt to be confirmed in Kilo's session database before reporting success."
+        },
+        "kilobridge.settleMs": {
+          "type": "number",
+          "default": 2000,
+          "description": "Milliseconds to wait after the New Task command so the Kilo chat view has rendered before focusing its input."
+        },
+        "kilobridge.sendMode": {
+          "type": "string",
+          "enum": ["sendkeys", "commands"],
+          "default": "sendkeys",
+          "description": "How the prompt is delivered after the Kilo chat input is focused. 'sendkeys': real Ctrl+V + Enter via the Windows SendKeys API into the activated VS Code window (reliable, no screen coordinates). 'commands': try VS Code paste/type commands (editor.action.clipboardPasteAction / webview.paste / type) - may silently no-op when no editor/text-input context exists."
+        },
+        "kilobridge.pasteCommands": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["editor.action.clipboardPasteAction", "webview.paste"],
+          "description": "VS Code commands tried (in order) to paste the prompt into the focused Kilo chat input."
+        },
+        "kilobridge.sendWithType": {
+          "type": "boolean",
+          "default": true,
+          "description": "DEPRECATED - use kilobridge.sendMode. Was: send by simulating Enter through VS Code's `type` command."
+        },
+        "kilobridge.sendKeysFallback": {
+          "type": "boolean",
+          "default": false,
+          "description": "DEPRECATED - use kilobridge.sendMode. Was: opt-in Windows SendKeys fallback."
+        },
+        "kilobridge.maxPromptLength": {
+          "type": "number",
+          "default": 20000,
+          "description": "Maximum prompt length accepted by POST /run."
+        },
+        "kilobridge.eventMirror": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show status events posted by the Job Control Center in the bridge log and status bar."
+        }
+      }
+    }
+  }
+}

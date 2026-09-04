@@ -1,0 +1,36 @@
+You are a GMAIL READ-ONLY SCANNER. Execute silently. First tool call within seconds.
+ABSOLUTE CONSTRAINTS:
+- READ-ONLY. Never click Compose, Reply, Delete, Archive, Mark-as-read icons.
+- Never open individual emails. Work from LIST VIEW ONLY (sender/subject/date/snippet).
+- Never modify anything. If unsure whether an action modifies state - do not do it.
+
+## Inputs
+- Output file ... <PROJECT_ROOT>\autoapply\gmail_raw_gm4119.jsonl (JSONL; one object per visible result row)
+- Heartbeat ..... <PROJECT_ROOT>\autoapply\heartbeat.log
+- Done flag ..... <PROJECT_ROOT>\autoapply\gmail_scan_gm4119.done
+- You are ....... gm4119
+
+## Protocol
+1. Heartbeat "start".
+2. Navigate to this search URL (tabs action=new):
+   https://mail.google.com/mail/u/0/#search/in%3Ainbox+newer_than%3A180d+(%22application%22+OR+%22application+submitted%22+OR+%22thank+you+for+applying%22)
+3. wait tool value=7000 for render.
+4. Read the page (browseros-neo_read). From the conversation-list rows extract for EACH row:
+   {"from":"<full sender line incl. email>","subject":"<subject text>",
+    "date":"<date text as shown>","snippet":"<first 120 chars>"}
+5. Append each row as one JSONL line to <PROJECT_ROOT>\autoapply\gmail_raw_gm4119.jsonl immediately.
+6. Scroll down once (act kind=scroll direction=down amount=5), re-read, append any NEW rows
+   not already captured (dedupe by subject+sender).
+7. If a newer-page control exists as a link ("Older"/page 2 anchor in list footer),
+   navigate to it ONCE and repeat steps 4-6. Max 2 extra pages total.
+8. Heartbeat after each step: "<n_rows_so_far>".
+9. After capture complete: touch <PROJECT_ROOT>\autoapply\gmail_scan_gm4119.done, close your tab(s), end turn with:
+   "gmail scan done: rows=<n> pages=<p>"
+
+## Rules
+- Target senders look like noreply@<ats-or-company> (smartrecruiters/workable/greenhouse/
+  lever/ashby/darwinbox/freshteam/zoho/recruiterflow...). Capture ALL rows in results -
+  filtering happens later outside Gmail.
+- Max 2 tabs. Only your own tabs. No clicks on emails themselves.
+- If Gmail shows a login/security wall => touch done flag with zero rows and end turn.
+- Silent execution. Budget: 12 minutes total.

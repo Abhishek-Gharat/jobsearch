@@ -1,0 +1,39 @@
+# --- secrets (never commit) ---
+.env
+.telegram.json
+.telegram_bot_state.json
+.telegram_bot.lock
+outreach/outreach_config.json
+outreach/gmail_sent_cache.json
+outreach/recruiter_outreach.json
+*app_password*
+*token*.json
+
+# --- personal artifacts ---
+*.pdf
+*.docx
+My_Job_Profile.md
+Resume.pdf
+
+# --- runtime / generated ---
+*.log
+excel-rows.json
+pipeline-state.json
+autoapply/*.json
+autoapply/*.jsonl
+autoapply/batches/
+autoapply/logs/
+autoapply/results/
+control-center/data/
+control-center/logs/
+
+# --- localonly ---
+__pycache__/
+*.pyc
+node_modules/
+browser_profile/
+.playwright-mcp/
+.kilo/
+.workbuddy-ai/
+.venv/
+.DS_Store

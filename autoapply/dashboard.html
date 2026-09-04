@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><title>JobOps Executive</title>
+<style>body{font-family:Segoe UI,Arial;background:#0f1420;color:#e6ebf5;margin:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.card{background:#182034;border-radius:10px;padding:16px}
+.k{color:#8ea0bf;font-size:12px;text-transform:uppercase}.v{font-size:28px;font-weight:600}
+.ok{color:#4ade80}.warn{color:#fbbf24}table{border-collapse:collapse;width:100%}
+td,th{padding:6px 10px;border-bottom:1px solid #233047;text-align:left;font-size:14px}
+h2{margin-top:26px}</style></head><body>
+<h1>JobOps Executive Dashboard</h1><div id="gen" class="k"></div><div class="grid" id="g"></div>
+<h2>Queue</h2><table id="q"></table><div class="k">Auto-refresh 30s &middot; serve folder via
+<code>python -m http.server</code> for live fetch</div>
+<script>
+const F=j=>fetch(j,{cache:"no-store"}).then(r=>r.json());
+async function tick(){
+ try{
+  const d=await F("dashboard.json"), l=await F("status_live.json");
+  document.getElementById("gen").textContent="updated "+new Date().toLocaleTimeString();
+  const items=[["Applications today",d.applications_today],["This week",d.applications_this_week],
+   ["Interview kits",d.interview_kits_ready],["Assessments",d.assessments_pending],
+   ["Offers",d.offers],["Response rate %",d.response_rate_pct],
+   ["Watchdog",(l.watchdog||{}).state],["Heartbeat age",(l.watchdog||{}).heartbeat_age_sec+"s"],
+   ["Restarts",(l.watchdog||{}).restart_count],["Current batch",(l.current_batch||"-")]];
+  document.getElementById("g").innerHTML=items.map(([k,v])=>`<div class="card"><div class="k">${k}</div><div class="v">${v?? "-"}</div></div>`).join("");
+  const q=d.queue||{};document.getElementById("q").innerHTML=
+   "<tr><th>pending</th><th>in_progress</th><th>submitted</th><th>review</th><th>failed</th></tr>"+
+   `<tr><td>${q.pending||0}</td><td>${q.in_progress||0}</td><td class="ok">${q.submitted||0}</td><td>${q.review_required||0}</td><td>${(q.failed||0)+(q.failed_unconfirmed||0)}</td></tr>`;
+ }catch(e){document.getElementById("gen").textContent="serve via http server for live updates";}
+}
+tick();setInterval(tick,30000);
+</script></body></html>

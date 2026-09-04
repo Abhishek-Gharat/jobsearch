@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recruiter Outreach Center</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --ink: #17181c;
+    --ink-2: #5c6270;
+    --ink-3: #9298a6;
+    --line: #e4e7ec;
+    --line-2: #eef0f4;
+    --accent: #4f46e5;
+    --accent-ink: #ffffff;
+    --accent-soft: #eef2ff;
+    --green: #067647;  --green-bg: #ecfdf3;
+    --orange: #b54708; --orange-bg: #fffaeb;
+    --violet: #5925dc; --violet-bg: #f4f3ff;
+    --blue: #175cd3;   --blue-bg: #eff8ff;
+    --slate: #475467;  --slate-bg: #f2f4f7;
+    --red: #b42318;    --red-bg: #fef3f2;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --radius: 12px;
+    --shadow-card: 0 1px 2px rgb(16 24 40 / .04), 0 1px 3px rgb(16 24 40 / .06);
+    --shadow-pop: 0 12px 32px -8px rgb(16 24 40 / .18), 0 4px 8px -4px rgb(16 24 40 / .08);
+    font-size: 15.5px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hwrap { max-width: 960px; margin: 0 auto; padding: 14px 20px 10px; }
+  .htop { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 17px; font-weight: 650; letter-spacing: -.01em; margin: 0; }
+  h1 span { color: var(--ink-3); font-weight: 500; }
+  .spacer { flex: 1; }
+  .stats { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .chip {
+    font-size: 12px; font-weight: 550; padding: 3px 9px;
+    border-radius: 99px; background: var(--slate-bg); color: var(--slate);
+  }
+  .chip.replied { background: var(--green-bg); color: var(--green); }
+  .chip.followup_due { background: var(--orange-bg); color: var(--orange); }
+  .chip.ready { background: var(--blue-bg); color: var(--blue); }
+  .chip.sent { background: var(--violet-bg); color: var(--violet); }
+  .chip.draft { background: var(--slate-bg); color: var(--slate); }
+  .chip.skipped { color: var(--ink-3); }
+
+  /* ---------- buttons ---------- */
+  button {
+    font: inherit; font-size: 13px; font-weight: 560;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: var(--card); color: var(--ink);
+    padding: 6px 12px; cursor: pointer;
+    transition: transform 160ms ease-out, background-color 140ms ease, border-color 140ms ease, opacity 140ms ease;
+  }
+  button:hover { background: #fafbfc; border-color: #d5dae2; }
+  button:active { transform: scale(0.97); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.primary:hover { background: #4338ca; }
+  button.danger { color: var(--red); }
+  button.danger:hover { background: var(--red-bg); border-color: #fecdca; }
+  button.approve { background: #d92d20; border-color: #d92d20; color: #fff; }
+  button.approve:hover { background: #b42318; }
+  button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  button.small { padding: 3px 9px; font-size: 12px; border-radius: 7px; }
+
+  input[type=text], select, textarea {
+    font: inherit; font-size: 13.5px; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 7px 10px; width: 100%; background: #fff;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgb(79 70 229 / .12);
+  }
+  textarea { resize: vertical; min-height: 180px; line-height: 1.55; }
+  label { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-2); text-transform: uppercase; letter-spacing: .05em; margin: 12px 0 4px; }
+
+  /* ---------- layout ---------- */
+  main { max-width: 960px; margin: 0 auto; padding: 18px 20px 80px; }
+  .toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .filters { display: flex; gap: 4px; flex-wrap: wrap; }
+  .filter {
+    border: 1px solid transparent; background: transparent; color: var(--ink-2);
+    padding: 4px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 550;
+  }
+  .filter:hover { background: var(--line-2); border-color: transparent; }
+  .filter[aria-pressed=true] { background: var(--ink); color: #fff; }
+
+  .banner {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--orange-bg); color: var(--orange);
+    border: 1px solid #fedf89; border-radius: var(--radius);
+    padding: 10px 14px; font-size: 13px; margin-bottom: 14px;
+  }
+  .banner.ok { background: var(--green-bg); color: var(--green); border-color: #abefc6; }
+  .banner code { background: rgb(255 255 255 / .7); padding: 1px 5px; border-radius: 5px; font-size: 12px; }
+
+  /* ---------- cards ---------- */
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  article.card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    overflow: hidden;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out),
+                border-color 160ms ease;
+  }
+  article.card.in { opacity: 1; transform: translateY(0); }
+  article.card[data-status=replied] { border-color: #a9efc5; }
+  article.card.dim { opacity: .62; }
+  @media (prefers-reduced-motion: reduce) {
+    article.card { transition: opacity 200ms ease; transform: none; }
+    * { animation-duration: .01ms !important; }
+  }
+
+  .chead { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; padding: 14px 16px 0; }
+  .co { font-weight: 650; font-size: 15.5px; letter-spacing: -.01em; }
+  .role { color: var(--ink-2); font-size: 13.5px; }
+  .badges { display: inline-flex; gap: 5px; margin-left: auto; align-items: center; }
+  .badge {
+    font-size: 11px; font-weight: 600; letter-spacing: .03em;
+    padding: 2px 8px; border-radius: 99px;
+  }
+  .badge.draft { background: var(--slate-bg); color: var(--slate); }
+  .badge.ready { background: var(--blue-bg); color: var(--blue); }
+  .badge.sent { background: var(--violet-bg); color: var(--violet); }
+  .badge.replied { background: var(--green-bg); color: var(--green); }
+  .badge.followup_due { background: var(--orange-bg); color: var(--orange); }
+  .badge.skipped { background: transparent; color: var(--ink-3); border: 1px dashed var(--line); }
+  .badge.variant { background: var(--accent-soft); color: var(--accent); }
+
+  .meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 4px 18px; padding: 8px 16px 0; font-size: 12.5px; color: var(--ink-2);
+  }
+  .meta b { color: var(--ink); font-weight: 560; }
+  .meta a { color: var(--accent); text-decoration: none; }
+  .meta a:hover { text-decoration: underline; }
+  .replybox {
+    margin: 10px 16px 0; padding: 8px 12px;
+    background: var(--green-bg); border: 1px solid #abefc6; border-radius: 8px;
+    font-size: 12.5px; color: var(--green);
+  }
+
+  .draftbox {
+    margin: 12px 16px 0; border: 1px solid var(--line-2);
+    border-radius: 8px; background: #fbfcfd;
+  }
+  .draftbox .subj {
+    padding: 8px 12px; border-bottom: 1px solid var(--line-2);
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  .draftbox .subj b { color: var(--ink); font-weight: 600; }
+  .draftbox pre {
+    margin: 0; padding: 12px 14px; white-space: pre-wrap; word-break: break-word;
+    font: inherit; font-size: 13px; color: #30333b;
+  }
+  .nodraft { padding: 12px 14px; font-size: 12.5px; color: var(--ink-3); font-style: italic; }
+
+  .fu { margin: 10px 16px 0; border: 1px dashed var(--line); border-radius: 8px; }
+  .fuhead { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; }
+  .fuhead .fu-subj { color: var(--ink); font-weight: 560; }
+  .fubody { padding: 0 12px 10px; white-space: pre-wrap; word-break: break-word; font-size: 12.5px; color: #30333b; }
+
+  .cactions {
+    display: flex; gap: 8px; justify-content: flex-end; align-items: center;
+    padding: 12px 16px 14px; flex-wrap: wrap;
+  }
+  .sentnote { font-size: 12px; color: var(--ink-3); margin-right: auto; }
+
+  /* ---------- modal ---------- */
+  dialog {
+    border: none; padding: 0; border-radius: 14px;
+    box-shadow: var(--shadow-pop);
+    width: min(720px, calc(100vw - 32px));
+    opacity: 0; transform: scale(0.96);
+    transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+  }
+  dialog[open] { opacity: 1; transform: scale(1); }
+  dialog::backdrop {
+    background: rgb(23 24 28 / .42);
+    transition: opacity 220ms ease;
+  }
+  .mhead { display: flex; align-items: center; padding: 16px 20px 0; }
+  .mhead h2 { font-size: 15.5px; font-weight: 650; margin: 0; letter-spacing: -.01em; }
+  .mbody { padding: 6px 20px 20px; max-height: min(70vh, 640px); overflow: auto; }
+
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; font-size: 13px; margin: 8px 0; }
+  .kv dt { color: var(--ink-2); } .kv dd { margin: 0; word-break: break-word; }
+
+  .checklist { border: 1px solid var(--line); border-radius: 8px; margin: 12px 0; overflow: hidden; }
+  .checkrow { display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; font-size: 12.5px; border-bottom: 1px solid var(--line-2); }
+  .checkrow:last-child { border-bottom: none; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex: none; }
+  .dot.ok { background: #12b76a; } .dot.bad { background: #f04438; } .dot.warn { background: #f79009; }
+  .prevdate { color: var(--red); font-weight: 560; }
+
+  .confirm-strip {
+    display: flex; align-items: center; gap: 10px; margin-top: 14px;
+    background: var(--red-bg); border: 1px solid #fecdca; border-radius: 8px; padding: 10px 12px;
+  }
+  .confirm-strip p { margin: 0; font-size: 12.5px; color: var(--red); }
+  .mfoot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+
+  /* ---------- toast ---------- */
+  #toasts { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: flex; flex-direction: column; gap: 8px; }
+  .toast {
+    background: var(--ink); color: #fff; font-size: 13px;
+    padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow-pop);
+    max-width: 380px;
+    transition: transform 300ms var(--ease-out), opacity 260ms ease;
+  }
+  .toast.hide { opacity: 0; transform: translateY(6px); }
+
+  .empty { text-align: center; color: var(--ink-3); padding: 60px 0; font-size: 14px; }
+  footer { max-width: 960px; margin: 0 auto; padding: 0 20px 40px; color: var(--ink-3); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="htop">
+      <h1>Recruiter Outreach <span>· draft &rarr; review &rarr; manual send</span></h1>
+      <span class="spacer"></span>
+      <button id="btn-replies" title="Scan Gmail inbox for replies (IMAP)">Check replies</button>
+      <button id="btn-add">+ Add recruiter</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main>
+  <div id="banner"></div>
+  <div class="toolbar">
+    <div class="filters" id="filters"></div>
+    <span class="spacer"></span>
+    <button id="btn-refresh" class="small">Refresh</button>
+  </div>
+  <div class="cards" id="cards"><div class="empty">Loading queue…</div></div>
+</main>
+
+<footer>
+  Every send requires your explicit approval — there is no bulk send and nothing is sent automatically.
+  Follow-ups are generated as drafts only (Day 5 / Day 10). Full audit history:
+  <code>recruiter_outreach_audit.jsonl</code>.
+</footer>
+
+<dialog id="dlg-send">
+  <form method="dialog" style="display:contents"><div class="mhead">
+    <h2>Review before sending</h2><span class="spacer"></span>
+    <button value="cancel" formnovalidate class="small">Close</button>
+  </div></form>
+  <div class="mbody" id="send-body"></div>
+</dialog>
+
+<dialog id="dlg-edit">
+  <form method="dialog" style="display:contents"><div class="mhead">
+    <h2>Edit outreach</h2><span class="spacer"></span>
+    <button value="cancel" formnovalidate class="small">Close</button>
+  </div></form>
+  <div class="mbody" id="edit-body"></div>
+</dialog>
+
+<dialog id="dlg-add">
+  <form method="dialog" style="display:contents"><div class="mhead">
+    <h2>Add recruiter</h2><span class="spacer"></span>
+    <button value="cancel" formnovalidate class="small">Close</button>
+  </div></form>
+  <div class="mbody" id="add-body"></div>
+</dialog>
+
+<div id="toasts"></div>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+let STATE = { records: [], filter: "all", mailConfigured: false, dryrun: false };
+
+/* ---------------- helpers ---------------- */
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]
+  ));
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts ? {headers:{"Content-Type":"application/json"}, ...opts} : undefined);
+  let data = null;
+  try { data = await r.json(); } catch { /* empty */ }
+  if (!r.ok && !data) data = { error: "http_" + r.status };
+  return { ok: r.ok, status: r.status, data };
+}
+function toast(msg, ms = 4200) {
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  $("#toasts").appendChild(t);
+  setTimeout(() => { t.classList.add("hide"); setTimeout(() => t.remove(), 350); }, ms);
+}
+function fmtDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleDateString(undefined, {day:"numeric", month:"short", year:"numeric"});
+}
+function fmtDateTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleString(undefined, {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"});
+}
+
+/* ---------------- rendering ---------------- */
+const FILTERS = ["all","followup_due","ready","draft","sent","replied","skipped"];
+
+function render() {
+  renderBanner();
+  renderStats();
+  renderFilters();
+  renderCards();
+}
+
+function renderBanner() {
+  const b = $("#banner");
+  if (STATE.dryrun) {
+    b.innerHTML = `<div class="banner ok"><strong>Dry-run mode.</strong>&nbsp;Sends are simulated end-to-end (message IDs are fake) — no email leaves your machine.</div>`;
+  } else if (!STATE.mailConfigured) {
+    b.innerHTML = `<div class="banner"><strong>Gmail not configured — sends are disabled.</strong>
+      Create an App Password (Google Account → Security → 2-Step Verification → App passwords), then set
+      <code>gmail_address</code> + <code>gmail_app_password</code> in <code>outreach_config.json</code>
+      or the <code>GMAIL_ADDRESS</code>/<code>GMAIL_APP_PASSWORD</code> environment variables.
+      Drafting, review and tracking all work without it.</div>`;
+  } else {
+    b.innerHTML = `<div class="banner ok"><strong>Gmail connected</strong> as <code>${esc(STATE.address||"")}</code>. Each send still requires your explicit confirmation below.</div>`;
+  }
+}
+
+function renderStats() {
+  const counts = {};
+  for (const r of STATE.records) counts[r.effective_status] = (counts[r.effective_status] || 0) + 1;
+  const order = ["replied","followup_due","ready","draft","sent","skipped"];
+  const quota = STATE.dailyLimit ? ` · sent today ${STATE.sentToday||0}/${STATE.dailyLimit}` : "";
+  $("#stats").innerHTML = order
+    .filter(k => counts[k])
+    .map(k => `<span class="chip ${k}">${k.replace("_"," ")} · ${counts[k]}</span>`).join("")
+    + `<span class="chip">${STATE.records.length} total</span>`
+    + (quota ? `<span class="chip" title="Daily send cap protects your Gmail from spam flags">${quota}</span>` : "");
+}
+
+function renderFilters() {
+  $("#filters").innerHTML = FILTERS.map(f =>
+    `<button class="filter" data-f="${f}" aria-pressed="${STATE.filter===f}">${f.replace("_"," ")}</button>`
+  ).join("");
+}
+
+function metaRow(r) {
+  const bits = [];
+  bits.push(`<div>Recruiter&nbsp;<b>${esc(r.recruiter_name || "—")}</b></div>`);
+  bits.push(`<div>Email&nbsp;<b>${esc(r.recruiter_email || "—")}</b></div>`);
+  bits.push(`<div>Application&nbsp;<b>${esc(r.application_status || "—")}</b>${r.job_id ? `&nbsp;·&nbsp;ref ${esc(r.job_id)}` : ""}</div>`);
+  const src = r.source ? esc(r.source) : "—";
+  bits.push(`<div>Source&nbsp;<b>${r.job_url ? `<a href="${esc(r.job_url)}" target="_blank" rel="noopener">${src}</a>` : src}</b></div>`);
+  if (r.sent_at) bits.push(`<div>Sent&nbsp;<b>${fmtDateTime(r.sent_at)}</b></div>`);
+  if (r.message_id) bits.push(`<div>Message-ID&nbsp;<b title="${esc(r.message_id)}">${esc(String(r.message_id).slice(1, 26))}…</b></div>`);
+  if (r.next_fu_due) bits.push(`<div>Follow-up due&nbsp;<b>${fmtDate(r.next_fu_due)}</b></div>`);
+  return bits.join("");
+}
+
+function draftBlock(r) {
+  if (!r.recruiter_email) {
+    return `<div class="draftbox"><div class="nodraft">No recruiter contact yet — click Edit, add name + email, then Generate draft.</div></div>`;
+  }
+  if (!r.draft) {
+    return `<div class="draftbox"><div class="nodraft">No draft yet — use Generate to write one from verified profile facts.</div></div>`;
+  }
+  return `<div class="draftbox">
+    <div class="subj"><b>To:</b> ${esc(r.recruiter_email)} &nbsp;&nbsp;<b>Subject:</b> ${esc(r.subject)}</div>
+    <pre>${esc(r.draft)}</pre>
+  </div>`;
+}
+
+function replyBlock(r) {
+  if (r.status !== "replied" || !r.reply_details) return "";
+  const d = r.reply_details;
+  return `<div class="replybox"><strong>Reply detected</strong> — ${esc(d.subject || "(no subject)")}
+     from ${esc(d.sender || r.recruiter_email)} · received ${esc(d.received_at || "")} · detected ${fmtDateTime(d.detected_at)}</div>`;
+}
+
+function followupBlocks(r) {
+  const kids = STATE.records.filter(x => x.parent_id === r.id);
+  if (!kids.length) return "";
+  return kids.map(k => `
+    <div class="fu">
+      <div class="fuhead">
+        <span class="badge ${k.effective_status==="skipped"?"skipped":(k.effective_status==="sent"?"sent":k.effective_status)}">${k.effective_status==="followup_due" ? "due now" : k.effective_status}</span>
+        <span class="fu-subj">Day-${k.followup_day} follow-up${k.sent_at ? " · sent " + fmtDate(k.sent_at) : ""}${k.effective_status==="followup_due" ? " · was due " + fmtDate(k.followup_due) : k.sent_at ? "" : " · drafts " + fmtDate(k.followup_due)}</span>
+        <span class="spacer"></span>
+        ${k.message_id ? `<span class="sentnote">✓ sent</span>` : `
+          <button class="small" onclick="openEdit('${k.id}')">Edit</button>
+          <button class="small primary" onclick="openSend('${k.id}')">Send</button>
+          <button class="small danger" onclick="skipRecord('${k.id}')">Skip</button>`}
+      </div>
+      ${k.draft ? `<div class="fubody">${esc(k.draft.split(/\n/).slice(0,3).join(" · "))}${k.draft.split(/\n/).length > 3 ? " …" : ""}</div>` : ""}
+    </div>`).join("");
+}
+
+function cardHTML(r, i) {
+  const dim = ["skipped"].includes(r.effective_status) ? "dim" : "";
+  const actions = r.message_id
+    ? `<span class="sentnote">Sent — this exact outreach will never be sent again.</span>`
+    : `
+      <button onclick="openEdit('${r.id}')">Edit</button>
+      ${(!r.draft && r.recruiter_email) ? `<button onclick="generateOne('${r.id}')">Generate draft</button>` : ""}
+      <button class="primary" onclick="openSend('${r.id}')" ${r.recruiter_email && r.draft ? "" : "disabled"}>Send</button>
+      <button class="danger" onclick="skipRecord('${r.id}')">Skip</button>`;
+  return `
+  <article class="card ${dim}" data-id="${r.id}" data-status="${r.effective_status}" style="transition-delay:${Math.min(i*35, 400)}ms">
+    <div class="chead">
+      <span class="co">${esc(r.company)}</span>
+      <span class="role">${esc(r.job_title)}</span>
+      <span class="badges">
+        ${r.kind === "followup" ? `<span class="badge variant">follow-up day ${r.followup_day}</span>` : ""}
+        <span class="badge ${r.effective_status}">${r.effective_status.replace("_"," ")}</span>
+        ${r.resume_variant ? `<span class="badge variant">${esc(r.resume_variant)}</span>` : ""}
+      </span>
+    </div>
+    <div class="meta">${metaRow(r)}</div>
+    ${replyBlock(r)}
+    ${draftBlock(r)}
+    ${r.kind === "outreach" ? followupBlocks(r) : ""}
+    <div class="cactions">${actions}</div>
+  </article>`;
+}
+
+function renderCards() {
+  const list = STATE.records.filter(r => {
+    if (r.kind === "followup") return false;             // rendered inside parents
+    if (STATE.filter === "all") return true;
+    return r.effective_status === STATE.filter;
+  });
+  const el = $("#cards");
+  if (!list.length) { el.innerHTML = `<div class="empty">Nothing here. Add a recruiter or seed submitted applications.</div>`; return; }
+  el.innerHTML = list.map(cardHTML).join("");
+  requestAnimationFrame(() => requestAnimationFrame(() =>
+    el.querySelectorAll("article.card").forEach(c => c.classList.add("in"))));
+}
+
+/* ---------------- actions ---------------- */
+window.skipRecord = async function(id) {
+  const rec = STATE.records.find(r => r.id === id);
+  if (!rec) return;
+  const reason = prompt(`Skip outreach to ${rec.recruiter_email || "(no email set)"}?\nOptional reason:`, "") ;
+  if (reason === null) return;
+  const res = await api("/api/skip", {method:"POST", body: JSON.stringify({id, reason})});
+  if (res.ok) { toast("Marked skipped."); load(); } else toast("Could not skip: " + (res.data.error || ""));
+};
+
+window.generateOne = async function(id) {
+  const res = await api("/api/generate", {method:"POST", body: JSON.stringify({id})});
+  if (res.ok) { toast("Draft generated from verified profile facts."); load(); }
+  else toast("Generate failed (recruiter email needed).");
+};
+
+window.openSend = async function(id) {
+  const res = await api(`/api/preflight?id=${encodeURIComponent(id)}`);
+  if (!res.ok) {
+    if (res.data.error === "already_sent") toast("Already sent — never re-sends.");
+    else toast("Preflight failed.");
+    return;
+  }
+  const p = res.data;
+  const dup = p.duplicate || {};
+  const rows = [];
+  rows.push(checkRow(!dup.blocked, dup.blocked
+    ? `Duplicate blocked — ${esc(dup.reasons[0].detail)}${dup.reasons[0].previous_date ? ` on <span class="prevdate">${esc(fmtDateTime(dup.reasons[0].previous_date))}</span>` : ""}`
+    : "No previous outreach to this recruiter + company + job"));
+  for (const w of dup.warnings || []) rows.push(checkRow(null, esc(w)));
+  rows.push(checkRow(!!p.attachment, p.attachment ? `Resume attached: <code>${esc(p.attachment)}</code>` : "No resume file found — will send without attachment"));
+  rows.push(checkRow(!!p.to, `Recipient: <b>${esc(p.to || "missing")}</b>`));
+
+  const canSend = p.can_send && (STATE.mailConfigured || STATE.dryrun);
+  $("#send-body").innerHTML = `
+    <dl class="kv">
+      <dt>Company</dt><dd><b>${esc((STATE.records.find(r=>r.id===id)||{}).company)}</b></dd>
+      <dt>Role</dt><dd>${esc((STATE.records.find(r=>r.id===id)||{}).job_title)}</dd>
+      <dt>To</dt><dd>${esc(p.to)}</dd>
+      <dt>Subject</dt><dd>${esc(p.subject)}</dd>
+    </dl>
+    <div class="draftbox"><pre>${esc(p.body)}</pre></div>
+    <div class="checklist">${rows.join("")}</div>
+    ${!STATE.mailConfigured && !STATE.dryrun ? `<div class="banner" style="margin-bottom:0">Gmail is not configured, so sending is disabled right now. Configure it in <code>outreach_config.json</code>.</div>` : ""}
+    <div class="confirm-strip">
+      <p>This sends <strong>one single email</strong> to <strong>${esc(p.to)}</strong>, records its Gmail Message-ID, marks it sent, and permanently blocks re-sending it. No bulk send exists anywhere in this tool.</p>
+      <span class="spacer"></span>
+    </div>
+    <div class="mfoot">
+      <button onclick="dlg-send.close()">Cancel</button>
+      <button class="approve" id="btn-confirm-send" ${canSend ? "" : "disabled"}>Approve — send this one email</button>
+    </div>`;
+  $("#dlg-send").showModal();
+  $("#btn-confirm-send").onclick = async () => {
+    const btn = $("#btn-confirm-send");
+    btn.disabled = true; btn.textContent = "Sending…";
+    const res2 = await api("/api/send", {method:"POST", body: JSON.stringify({id, confirm:true})});
+    if (res2.ok) {
+      $("#dlg-send").close();
+      const d = res2.data;
+      toast(`Sent ✓  Message-ID ${d.message_id}` + (d.mode === "dryrun" ? " (dry-run)" : "") + ` — Day-5/Day-10 drafts scheduled.`, 7000);
+      load();
+    } else if ((res2.data.duplicate || {}).blocked) {
+      $("#dlg-send").close();
+      const rd = res2.data.duplicate.reasons[0];
+      toast(`Blocked: duplicate. Previous outreach ${rd.previous_date ? "on " + fmtDateTime(rd.previous_date) : ""}`, 8000);
+      load();
+    } else if (res2.status === 429) {
+      btn.disabled = false; btn.textContent = "Approve — send this one email";
+      toast(res2.data.detail || "Pacing limit active.", 9000);
+    } else {
+      btn.disabled = false; btn.textContent = "Approve — send this one email";
+      toast("Send failed: " + (res2.data.detail || res2.data.error || ""));
+    }
+  };
+};
+
+window.openEdit = function(id) {
+  const r = STATE.records.find(x => x.id === id);
+  if (!r) return;
+  if (r.message_id) { toast("Already sent — records are immutable."); return; }
+  $("#edit-body").innerHTML = `
+    <label>Recruiter name</label><input type="text" id="e-name" value="${esc(r.recruiter_name)}" placeholder="e.g. Priya Sharma">
+    <label>Recruiter email</label><input type="text" id="e-email" value="${esc(r.recruiter_email)}" placeholder="recruiter@company.com">
+    <label>Subject</label><input type="text" id="e-subject" value="${esc(r.subject)}">
+    <label>Email draft (plain text)</label><textarea id="e-draft">${esc(r.draft)}</textarea>
+    <label>Notes</label><input type="text" id="e-notes" value="${esc(r.notes)}">
+    <div class="mfoot">
+      <button onclick="regenDraft('${r.id}')">Re-generate from profile</button>
+      <button onclick="saveDraft('${r.id}', false)">Cancel changes</button>
+      <button class="primary" onclick="saveDraft('${r.id}', true)">Save</button>
+    </div>`;
+  $("#dlg-edit").showModal();
+};
+
+window.saveDraft = async function(id, save) {
+  if (!save) { $("#dlg-edit").close(); return; }
+  const payload = {
+    id,
+    recruiter_name: $("#e-name").value,
+    recruiter_email: $("#e-email").value.trim(),
+    subject: $("#e-subject").value,
+    draft: $("#e-draft").value,
+    notes: $("#e-notes").value,
+  };
+  const res = await api("/api/draft", {method:"POST", body: JSON.stringify(payload)});
+  if (res.ok) { $("#dlg-edit").close(); toast("Saved."); load(); }
+  else toast("Save failed.");
+};
+
+window.regenDraft = async function(id) {
+  await api("/api/draft", {method:"POST", body: JSON.stringify({
+    id,
+    recruiter_name: $("#e-name").value,
+    recruiter_email: $("#e-email").value.trim(),
+    generate: true,
+  })});
+  toast("Re-generated from verified facts.");
+  load();
+  openEdit(id);
+};
+
+$("#btn-add").onclick = () => {
+  $("#add-body").innerHTML = `
+    <label>Company *</label><input type="text" id="a-company" placeholder="Company name">
+    <label>Role</label><input type="text" id="a-title" placeholder="Job title">
+    <label>Recruiter name</label><input type="text" id="a-name">
+    <label>Recruiter email *</label><input type="text" id="a-email" placeholder="name@company.com">
+    <label>Application ref / job ID</label><input type="text" id="a-jobid" placeholder="(optional)">
+    <label>Source</label>
+    <select id="a-source">
+      <option>manual</option><option>linkedin</option><option>naukri</option>
+      <option>referral</option><option>career page</option>
+    </select>
+    <label>Job URL</label><input type="text" id="a-url">
+    <div class="mfoot">
+      <button onclick="dlg-add.close()">Cancel</button>
+      <button class="primary" id="btn-do-add">Add recruiter</button>
+    </div>`;
+  $("#dlg-add").showModal();
+  $("#btn-do-add").onclick = async () => {
+    const body = {
+      company: $("#a-company").value.trim(),
+      job_title: $("#a-title").value.trim(),
+      recruiter_name: $("#a-name").value.trim(),
+      recruiter_email: $("#a-email").value.trim(),
+      job_id: $("#a-jobid").value.trim(),
+      source: $("#a-source").value,
+      job_url: $("#a-url").value.trim(),
+    };
+    if (!body.company || !body.recruiter_email.includes("@")) { toast("Company + valid recruiter email required."); return; }
+    const res = await api("/api/add", {method:"POST", body: JSON.stringify(body)});
+    if (res.ok) { $("#dlg-add").close(); toast("Added. Click Edit → Generate draft when ready."); load(); }
+    else toast("Add failed: " + (res.data.error || ""));
+  };
+};
+
+$("#btn-replies").onclick = async function() {
+  const btn = this; btn.disabled = true;
+  const res = await api("/api/check-replies", {method:"POST"});
+  btn.disabled = false;
+  if (res.ok) {
+    const n = Array.isArray(res.data.new_replies) ? res.data.new_replies.length : res.data.new_replies;
+    toast(n ? `${n} new reply(ies) moved to top.` : `No new replies (checked ${res.data.checked}).`);
+    load();
+  } else toast("Reply check needs Gmail configured (IMAP).");
+};
+
+$("#btn-refresh").onclick = () => load();
+$("#filters").onclick = (e) => {
+  const f = e.target.closest(".filter");
+  if (f) { STATE.filter = f.dataset.f; renderFilters(); renderCards(); }
+};
+document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll("dialog[open]").forEach(d => d.close()); });
+
+function checkRow(state, html) {
+  const cls = state === true ? "ok" : state === false ? "bad" : "warn";
+  const label = state === true ? "OK" : state === false ? "STOP" : "note";
+  return `<div class="checkrow"><span class="dot ${cls}"></span><span><b>${label}</b> — ${html}</span></div>`;
+}
+
+/* ---------------- load ---------------- */
+async function load() {
+  const res = await api("/api/outreach");
+  if (!res.ok) { $("#cards").innerHTML = `<div class="empty">Server error.</div>`; return; }
+  const d = res.data;
+  STATE.records = d.records.map(r => ({...r, effective_status: r.display_status || r.status}));
+  STATE.mailConfigured = d.mail_configured;
+  STATE.dryrun = d.dryrun;
+  STATE.address = d.address;
+  STATE.dailyLimit = d.daily_limit;
+  STATE.sentToday = d.sent_today;
+  render();
+}
+load();
+setInterval(() => { if (document.visibilityState === "visible") load(); }, 90000);
+</script>
+</body>
+</html>
