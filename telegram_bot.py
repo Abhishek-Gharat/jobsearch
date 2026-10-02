@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-telegram_bot.py — control the <PROJECT_ROOT> job repository from Telegram.
+telegram_bot.py — control the D:\\newjobs job repository from Telegram.
 
 Two-way link. `telegram_reports.py` pushes reports OUT; this bot takes commands IN.
 

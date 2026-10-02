@@ -31,6 +31,9 @@ SEEN_PATH = BASE / "seen_jobs.json"
 CONFIG_PATH = BASE / "sniper_config.json"
 LOG_PATH = BASE / "sniper.log"
 ALERTS_HTML = BASE / "alerts_dashboard.html"
+ROOT = BASE.parent
+JOBS_PATH = ROOT / "autoapply" / "jobs.json"
+SELECTION_PATH = ROOT / "fresh25_selected.json"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("dashboard_server")
@@ -84,6 +87,34 @@ def load_log(lines: int = 100) -> list[str]:
         return []
 
 
+def load_fresh25() -> dict:
+    """Live canonical-queue view of the fresh25 selection."""
+    import supervisor as sup
+    jobs = sup.load_jobs()["jobs"]
+    sel = json.loads(SELECTION_PATH.read_text(encoding="utf-8-sig"))
+    sel_ids = {r["queue_id"] for r in (sel.get("ats_engine") or []) + (sel.get("naukri_engine") or [])}
+    label = {"pending": "PENDING", "in_progress": "IN PROGRESS", "submitted": "SUBMITTED",
+             "failed": "FAILED", "failed_unconfirmed": "UNVERIFIED",
+             "review_required": "PENDING_HUMAN", "skipped": "SKIPPED"}
+    rows = []
+    for j in jobs["jobs"]:
+        if j.get("id") not in sel_ids:
+            continue
+        ev = (j.get("evidence") or {}).get("confirmation", "")
+        rows.append({
+            "id": j.get("id"), "portal": j.get("portal", ""),
+            "company": j.get("company", ""), "title": j.get("title", ""),
+            "score": j.get("match_score"), "status": j.get("status", "pending"),
+            "status_label": label.get(j.get("status"), j.get("status")),
+            "detail": ev if j.get("status") == "submitted" else j.get("error", ""),
+            "url": j.get("url", ""),
+        })
+    order = {"pending": 0, "in_progress": 1, "submitted": 2, "review_required": 3,
+             "failed": 4, "failed_unconfirmed": 5, "skipped": 6}
+    rows.sort(key=lambda r: (order.get(r["status"], 9), r["id"]))
+    return {"generated_at": sup.now(), "stats": sup.stats(jobs), "jobs": rows}
+
+
 def get_overview_stats() -> dict:
     seen = load_seen()
     config = load_config()
@@ -129,6 +160,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self._serve_json(load_config())
         elif path == "/api/log":
             self._serve_json({"lines": load_log(100)})
+        elif path == "/api/fresh25":
+            self._serve_json(load_fresh25())
         else:
             self.send_error(404)
 

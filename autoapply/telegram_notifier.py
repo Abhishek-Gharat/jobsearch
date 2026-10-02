@@ -29,7 +29,7 @@ TELEGRAM_API = "https://api.telegram.org"
 REQUEST_TIMEOUT = 15  # seconds
 
 # Credentials are shared with the root-level reporter:
-#   <PROJECT_ROOT>\telegram_reports.py  (config: <PROJECT_ROOT>\.telegram.json)
+#   D:\newjobs\telegram_reports.py  (config: D:\newjobs\.telegram.json)
 # Configure once with:
 #   python telegram_reports.py setup --token <TOKEN> --chat <CHAT_ID>
 _CONFIG_PATH = Path(__file__).resolve().parent.parent / ".telegram.json"

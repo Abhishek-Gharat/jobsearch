@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-telegram_reports.py — push every job-hunt report from <PROJECT_ROOT> to Telegram.
+telegram_reports.py — push every job-hunt report from D:\\newjobs to Telegram.
 
 Stdlib only (urllib + json). No pip install, works on any Python 3.8+.
 
@@ -28,7 +28,7 @@ USAGE
     python telegram_reports.py send-all --doc         every report + file attachments
     python telegram_reports.py watch --interval 120   live push when a report changes
 
-Credentials are read from <PROJECT_ROOT>\\.telegram.json, or from the environment
+Credentials are read from D:\\newjobs\\.telegram.json, or from the environment
 variables TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID (env wins).
 """
 
@@ -919,7 +919,7 @@ def main() -> int:
 
     p = argparse.ArgumentParser(
         prog="telegram_reports.py",
-        description="Push job-hunt reports from <PROJECT_ROOT> to Telegram.",
+        description="Push job-hunt reports from D:\\newjobs to Telegram.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="examples:\n"
                "  python telegram_reports.py setup --token 123:ABC --chat 987654\n"

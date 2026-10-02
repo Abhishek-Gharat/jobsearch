@@ -18,11 +18,11 @@ Read these files before doing any work:
 
 Profile:
 
-`<PROJECT_ROOT>\Job_Profile.TEMPLATE.md`
+`D:\newjobs\Job_Profile.TEMPLATE.md`
 
 Resume:
 
-`<PROJECT_ROOT>\Resume.pdf`
+`D:\newjobs\Resume.pdf`
 
 The profile is the source of truth.
 
@@ -392,7 +392,7 @@ Automatically:
 
 * Fill all known fields.
 * Upload:
-  `<PROJECT_ROOT>\Resume.pdf`
+  `D:\newjobs\Resume.pdf`
 * Fill LinkedIn.
 * Fill GitHub.
 * Fill portfolio.

@@ -1,6 +1,6 @@
 import urllib.request, json, os
 
-store_file = r"<PROJECT_ROOT>\control-center\data\excel-rows.json"
+store_file = r"D:\newjobs\control-center\data\excel-rows.json"
 if os.path.exists(store_file):
     with open(store_file, "r", encoding="utf-8") as f:
         store = json.load(f)

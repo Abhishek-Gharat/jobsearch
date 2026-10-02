@@ -14,7 +14,7 @@
     "browseros",
     "automation"
   ],
-  "author": "Your Name",
+  "author": "Alex Morgan",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

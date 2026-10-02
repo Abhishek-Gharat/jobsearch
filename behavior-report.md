@@ -125,8 +125,8 @@ For each job, the intended flow was:
 **What happened:**
 - Opened company career page (tab 135)
 - Form had fields: Name, Email, Position dropdown, Resume upload
-- Name was pre-filled: "Your Name"
-- Email was pre-filled: "your.email@example.com"
+- Name was pre-filled: "Alex Morgan"
+- Email was pre-filled: "candidate@example.com"
 - Position was pre-selected: "Creative Front End Developer"
 - Resume upload was challenging:
   - File input was hidden (CSS `opacity: 0`, `width: 0`, `height: 0`)

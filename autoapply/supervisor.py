@@ -21,6 +21,7 @@ import ctypes
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -67,6 +68,7 @@ DEFAULTS = {
     "job_budget_sec": 150,
     "batch_base_timeout_sec": 600,
     "batch_timeout_per_job_sec": 240,
+    "malformed_tool_error_threshold": 5,
     "max_retries_per_batch": 2,
     "max_job_attempts": 2,
     "opencode_cmd": "opencode",
@@ -126,13 +128,17 @@ def now() -> str:
     return datetime.now().isoformat(timespec="seconds")
 
 
-def load_json(path: Path, default):
+def load_json(path: Path, default, *, log_corrupt: bool = True):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
     except FileNotFoundError:
         return default
     except Exception as exc:
-        log_event("state_corrupt", note=f"{path.name}: {exc}; default substituted")
+        # Progress is an intentionally volatile, worker-written file.  Callers
+        # that poll it must be able to treat a half-written snapshot as absent
+        # without emitting one state_corrupt event per poll.
+        if log_corrupt:
+            log_event("state_corrupt", note=f"{path.name}: {exc}; default substituted")
         return default
 
 
@@ -145,6 +151,56 @@ def save_json(path: Path, data) -> None:
 def touch_heartbeat(source: str, msg: str = "") -> None:
     with open(heartbeat_file(), "a", encoding="utf-8") as fh:
         fh.write(f"{now()}|{source}|{msg}\n")
+
+
+_MALFORMED_TOOL_RE = re.compile(
+    r"\binvalid\s+tool\b|\bjson\s+parsing\s+failed\b|"
+    r"\bjson\s+parse(?:\s+error|ing\s+error)\b",
+    re.IGNORECASE,
+)
+
+
+def count_malformed_tool_errors(output: str) -> int:
+    """Count tool-protocol failures in a worker output fragment.
+
+    This deliberately does not treat a slow/no-output worker as malformed.  A
+    caller must combine the count with the absence of a valid result before
+    aborting, so ordinary browser operations retain their normal timeout.
+    """
+    return len(_MALFORMED_TOOL_RE.findall(output or ""))
+
+
+def should_abort_malformed_tool_loop(error_count: int, valid_result_ids: set,
+                                     baseline_result_ids: set, threshold: int) -> bool:
+    """Decide whether protocol errors justify killing/retrying a worker."""
+    return (error_count >= max(1, threshold)
+            and not (valid_result_ids - baseline_result_ids))
+
+
+def read_worker_output_delta(path: Path, offset: int) -> tuple[str, int]:
+    """Read only newly appended worker output, tolerating truncation/rotation."""
+    try:
+        size = path.stat().st_size
+        if size < offset:
+            offset = 0
+        with path.open("rb") as fh:
+            fh.seek(offset)
+            data = fh.read()
+            return data.decode("utf-8", errors="replace"), fh.tell()
+    except (FileNotFoundError, OSError):
+        return "", offset
+
+
+def file_activity_signature(*paths: Path) -> tuple[tuple[str, int, int], ...]:
+    """Return a cheap signature for supervisor-observable worker activity."""
+    out = []
+    for path in paths:
+        try:
+            st = path.stat()
+            out.append((str(path), st.st_size, st.st_mtime_ns))
+        except OSError:
+            out.append((str(path), -1, -1))
+    return tuple(out)
 
 
 def heartbeat_age_of(prefix: str) -> float:
@@ -405,6 +461,59 @@ def _extract_profile_facts() -> str:
     return "\n".join(dict.fromkeys(facts)) or "(see profile file)"
 
 
+def _answer_bank() -> str:
+    """Deterministic profile answers, resolved locally from candidate_core.json.
+
+    Injected verbatim into the worker prompt so the worker never has to derive
+    (or ask for) a routine field. No LLM is used to produce any value here.
+    """
+    import json as _json
+    try:
+        c = _json.loads((ROOT / "agent_state" / "candidate_core.json")
+                        .read_text(encoding="utf-8-sig"))
+    except Exception:
+        return "(candidate_core.json unreadable - consult profile + tracker rules)"
+
+    def mca():
+        m = c.get("education", {}).get("post_graduation", {}) or {}
+        return f"{m.get('degree', '')}, {m.get('institution', '')} ({m.get('years', '')}), {m.get('score', '')}"
+
+    def grad():
+        g = c.get("education", {}).get("graduation", {}) or {}
+        return f"{g.get('degree', '')}, {g.get('institution', '')} ({g.get('years', '')}), {g.get('score', '')}"
+
+    urls = c.get("urls", {}) or {}
+    pairs = [
+        ("Full name", c.get("name")),
+        ("First name", c.get("first_name")),
+        ("Last name", c.get("last_name")),
+        ("Email", c.get("email")),
+        ("Phone (with country code)", c.get("phone_with_country") or
+         f"+{c.get('country_code', '91')} {c.get('phone', '')}"),
+        ("Phone (digits only, no +/spaces)", c.get("phone")),
+        ("Country / work authorization", c.get("country")),
+        ("City", c.get("city")),
+        ("Location", c.get("location")),
+        ("Total experience (years, decimal)", c.get("total_experience_years")),
+        ("Experience label", c.get("experience_label")),
+        ("Experience for whole-year-only fields", 1),
+        ("Experience for month fields", "12 months"),
+        ("Availability / notice period", f"{c.get('availability')} ({c.get('notice_period_days')} days)"),
+        ("Current CTC", f"{c.get('current_ctc_lpa')} LPA"),
+        ("Expected / minimum CTC", f"{c.get('expected_ctc_lpa')} LPA"),
+        ("Highest qualification", mca()),
+        ("Graduation", grad()),
+        ("LinkedIn", urls.get("linkedin")),
+        ("GitHub", urls.get("github")),
+        ("Portfolio", urls.get("portfolio")),
+        ("Resume file", c.get("resume_pdf")),
+        ("Core skills", ", ".join(c.get("core_skills") or [])),
+        ("Short summary", c.get("short_summary")),
+    ]
+    lines = [f"{k} = {v}" for k, v in pairs if v not in (None, "")]
+    return "\n".join(lines)
+
+
 def render_prompt(batch_file: Path, results_file: Path, done_flag: Path,
                   progress_file: Path, worker_id: str) -> str:
     tpl = (BASE / "worker_prompt.txt").read_text(encoding="utf-8-sig")
@@ -428,6 +537,7 @@ def render_prompt(batch_file: Path, results_file: Path, done_flag: Path,
         "%%WORKER_ID%%": worker_id,
         "%%JOBS_INLINE%%": jobs_inline,
         "%%PROFILE_FACTS%%": _extract_profile_facts(),
+        "%%ANSWER_BANK%%": _answer_bank(),
         "%%JOB_BUDGET%%": str(bdata.get("job_time_budget_sec", 150)),
     }
     out = tpl
@@ -472,14 +582,23 @@ def run_batch_real(batch_id: str, worker_id: str, batch: list[dict], cls: str,
     outcome = {"exit_code": None, "how": "clean", "retries": 0}
 
     def _resulted_ids():
+        """Return syntactically valid job results, ignoring partial lines."""
         s = set()
         try:
-            for ln in results_file.read_text(encoding="utf-8-sig").splitlines():
-                if ln.strip():
-                    s.add(json.loads(ln).get("job_id"))
-        except Exception:
-            pass
-        return {i for i in s if i}
+            lines = results_file.read_text(encoding="utf-8-sig").splitlines()
+        except (FileNotFoundError, OSError, UnicodeError):
+            return s
+        for ln in lines:
+            if not ln.strip():
+                continue
+            try:
+                entry = json.loads(ln)
+            except (TypeError, ValueError, json.JSONDecodeError):
+                continue
+            if (isinstance(entry, dict) and entry.get("job_id")
+                    and isinstance(entry.get("result"), str)):
+                s.add(entry["job_id"])
+        return s
 
     for attempt in range(cfg["max_retries_per_batch"] + 1):
         if attempt > 0:
@@ -514,16 +633,55 @@ def run_batch_real(batch_id: str, worker_id: str, batch: list[dict], cls: str,
         how = "clean"
         spawn_t = time.time()
         seen_hb = False
+        activity_paths = (worker_out, progress_file, results_file)
+        last_activity = file_activity_signature(*activity_paths)
+        last_activity_t = spawn_t
+        activity_seen = False
+        try:
+            output_offset = worker_out.stat().st_size
+        except OSError:
+            output_offset = 0
+        baseline_result_ids = _resulted_ids()
+        malformed_errors = 0
+        malformed_threshold = max(1, int(cfg.get("malformed_tool_error_threshold", 5)))
 
         while True:
             rc = proc.poll()
+            # Capture output even when the process exits between polls.  A
+            # clean exit after a protocol-error loop must still be retried.
+            output_delta, output_offset = read_worker_output_delta(worker_out, output_offset)
+            malformed_errors += count_malformed_tool_errors(output_delta)
+            valid_result_ids = _resulted_ids()
+            if should_abort_malformed_tool_loop(
+                    malformed_errors, valid_result_ids, baseline_result_ids,
+                    malformed_threshold):
+                if rc is None:
+                    kill_tree(proc.pid)
+                how = "malformed_tool_loop"
+                if rc is not None:
+                    outcome["exit_code"] = rc
+                break
             if rc is not None:
                 outcome["exit_code"] = rc
                 break
+
             # 60s-flush contract: fold worker progress into checkpoint every poll (<=10s)
             merge_worker_progress(progress_file, wid)
-            age = heartbeat_age_of(tag)
-            seen_hb = seen_hb or age != float("inf")
+            activity = file_activity_signature(*activity_paths)
+            if activity != last_activity:
+                last_activity = activity
+                last_activity_t = time.time()
+                activity_seen = True
+                # This pulse is supervisor-owned and deterministic.  It is
+                # separate from the worker tag, so it cannot make a stuck
+                # worker look alive; observed output/progress/results activity
+                # is the fallback when a PowerShell heartbeat call fails.
+                touch_heartbeat(f"supervisor_{wid}", "worker_activity")
+
+            worker_age = heartbeat_age_of(tag)
+            activity_age = time.time() - last_activity_t
+            seen_hb = seen_hb or worker_age != float("inf") or activity_seen
+            age = min(worker_age, activity_age)
             if seen_hb:
                 stale_after = cfg["heartbeat_timeout_sec"]
             else:
@@ -567,7 +725,10 @@ def run_batch_real(batch_id: str, worker_id: str, batch: list[dict], cls: str,
 
 
 def merge_worker_progress(progress_file: Path, worker_id: str) -> None:
-    prog = load_json(progress_file, None)
+    # PowerShell can expose the file while ConvertTo-Json is still writing it.
+    # It is a volatile hint, not durable state; do not log the same parse failure
+    # on every watchdog poll.
+    prog = load_json(progress_file, None, log_corrupt=False)
     if isinstance(prog, dict) and prog.get("job"):
         refresh_checkpoint(current_job=prog["job"], worker_id=prog.get("worker_id", worker_id))
 

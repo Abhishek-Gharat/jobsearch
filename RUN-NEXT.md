@@ -2,6 +2,49 @@
 
 Audit date: 2026-09-03
 
+> **UPDATE 2026-09-17 — read this before using sections 3 and 6 below.**
+>
+> `D:\newjobs\excel-rows.json` was found **corrupted** (half-written JSON: the
+> array ended with a trailing `},` and no closing `]`), so `json.loads` failed for
+> every consumer. It has been repaired and now parses.
+>
+> What survived: **5 rows — Q031, Q033, Q034, Q035, Q036** (3 PENDING_HUMAN,
+> 1 SUBMITTED, 1 NOT_PROCESSED).
+>
+> **Q001–Q030 are gone.** The truncated file did not contain them and no other
+> artifact records their URLs/fields, so they cannot be reconstructed without
+> inventing data (forbidden by `starterprompt.md` §17). They are **not** available
+> in `control-center/data/excel-rows.json` either — that store's `JobQueue` is a
+> *different* run (2026-08-17, mostly Naukri) that reuses the same Q001–Q050 ids but
+> maps them to different companies (e.g. Q004 there is "Yugasys Software", not
+> "Frontline Data Solutions"). Merging the two would corrupt both.
+>
+> Consequently **section 3 and section 6 below are historical, not current.**
+> Re-run discovery per section 7 to rebuild the queue.
+>
+> The write path is now guarded — always save through `queue_store.py`, never by
+> writing the file directly (see `starterprompt.md` §15a).
+>
+> **MCP endpoint note (2026-09-17).** BrowserOS neo serves the same browser
+> instance on more than one port and the port has changed over time: `9211` (what
+> this doc used to say) is **dead**, `9210` and `9010` are **both live and
+> identical** (same window id, same tabs, `browseros-neo` v0.0.50). Verify before
+> running the pipeline:
+>
+> ```bash
+> python -c "import bos; b=bos.BOS('probe'); print('ok', bos.PORT)"
+> ```
+>
+> `bos.py` now defaults to 9010 and honours `BROWSEROS_PORT` / `BROWSEROS_HOST`.
+> Note that the three outreach scripts (`whatsapp_outreach.py`,
+> `recruiter_outreach.py`, `hiring_lead_hunter.py`) still hardcode `9210`; they
+> currently work but will break when that listener goes away.
+>
+> Also: an MCP page is **owned by the session that created it**. A later session
+> can `tabs list` and see it, but cannot snapshot, read or act on it — everything a
+> flow needs must happen inside the one process that opened the tab.
+
+
 ## 1. Blocking prerequisite
 
 **Open a NEW WorkBuddy conversation before running anything.**
@@ -16,11 +59,11 @@ Sanity check in the new chat: ask it to list your browser tabs. A real tab list 
 
 | Item | Status |
 |---|---|
-| BrowserOS neo MCP | connected, `http://127.0.0.1:9211/mcp`, v0.0.50, 20 tools |
-| LinkedIn login | **live** — "Your Name, Frontend Developer @ Example Company A, Mumbai, Premium" |
+| BrowserOS neo MCP | connected — `http://127.0.0.1:9010/mcp` (port moves; 9210 also live, 9211 dead), v0.0.50, 20 tools |
+| LinkedIn login | **live** — "Alex Morgan, Frontend Developer @ Hridayam Soft Solutions, Mumbai, Premium" |
 | Naukri login | **live** — multiple prior `myapply/showAcp` confirmation tabs |
-| Resume | `<PROJECT_ROOT>\Resume.pdf` |
-| Profile | `<PROJECT_ROOT>\Job_Profile.TEMPLATE.md` |
+| Resume | `D:\newjobs\Resume.pdf` |
+| Profile | `D:\newjobs\Job_Profile.TEMPLATE.md` |
 
 ## 3. Queue status — `excel-rows.json` (30 jobs)
 
@@ -92,23 +135,23 @@ drop a job from the master queue.
 ### Phase 1 — discovery (paste this first)
 
 ```
-Read <PROJECT_ROOT>\starterprompt.md, <PROJECT_ROOT>\Job_Profile.TEMPLATE.md and
-<PROJECT_ROOT>\Resume.pdf. Run job discovery for the LAST 7 DAYS, target 10 jobs,
+Read D:\newjobs\starterprompt.md, D:\newjobs\Job_Profile.TEMPLATE.md and
+D:\newjobs\Resume.pdf. Run job discovery for the LAST 7 DAYS, target 10 jobs,
 from Naukri + LinkedIn + Wellfound only. Use BrowserOS neo for all browsing.
 
-Save results to <PROJECT_ROOT>\excel-rows.json and <PROJECT_ROOT>\job-findings.md.
+Save results to D:\newjobs\excel-rows.json and D:\newjobs\job-findings.md.
 Do NOT apply to anything. When done, show me the ranked shortlist and stop for my review.
 ```
 
 ### Phase 2 — apply (paste only after you approve the shortlist)
 
 ```
-Run <PROJECT_ROOT>\exicutionrules.md against the 10 jobs just discovered in
-<PROJECT_ROOT>\excel-rows.json, sequentially, using BrowserOS neo.
-Resume: <PROJECT_ROOT>\Resume.pdf.
+Run D:\newjobs\exicutionrules.md against the 10 jobs just discovered in
+D:\newjobs\excel-rows.json, sequentially, using BrowserOS neo.
+Resume: D:\newjobs\Resume.pdf.
 Follow the state machine exactly: OPEN -> SNAPSHOT -> ACT -> SNAPSHOT -> VERIFY -> LOG -> NEXT.
 Max 90s per job, 3 recovery attempts per interaction, fresh snapshot after every
 navigation, click and redirect. Stop for me on CAPTCHA/OTP and mark PENDING_HUMAN.
-Append every non-completed job to <PROJECT_ROOT>\failed-jobs.md with reason and URL.
+Append every non-completed job to D:\newjobs\failed-jobs.md with reason and URL.
 Report submitted / pending human / failed / skipped / not processed counts.
 ```

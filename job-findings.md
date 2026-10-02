@@ -1,563 +1,284 @@
 # Job Findings
-opencode -s ses_feb96ee78ffeTWK9zQWyBQ6kJv
-Search Date: 2026-08-18
-Requested Time Period: Last 3 days (from 2026-08-15)
-Requested Job Count: 25
+
+Search Date: 2026-09-11
+Requested Time Period: Last 7 days
+Requested Job Count: 10
 
 ## Summary
 
-Jobs discovered: 92
-Unique jobs: 71
-Jobs passing date filter: 58
-Jobs passing profile threshold: 51
-Final jobs selected: 25
+Jobs discovered: 6
+Unique jobs: 6
+Jobs passing date filter: 6
+Jobs passing profile threshold: 6
+Final jobs selected: 6
 
 ## Jobs
 
-### Q001 — Quik Hire Staffing — JavaScript Frontend Developer (Remote)
+### Q031 — Togetherv — Js Developer
 
 Status: FOUND
-Match: 85%
-Platform: LinkedIn
+Match: 75%
+Platform: Naukri
 Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
+Location: India (Noida)
+Posted: 2026-09-11
+Experience: 1-4 years
 
-Job URL: https://www.linkedin.com/jobs/view/4455217963/
+Job URL: https://www.naukri.com/job-listings-js-developer-togetherv-noida-1-to-4-years-080725501974
 
-Reason: Strong match for JavaScript, React, Node.js, Express, REST API, and Git. Remote contract role aligns with profile.
+Reason: Good match for JavaScript/web development. Profile has React and JavaScript experience. Noida location in India.
 
-Matching Skills: JavaScript, React, Node.js, Express.js, REST API, Git
+Matching Skills: JavaScript, Web Development
 
-Missing Skills: TypeScript
+Missing Skills: React
 
-Source URLs: https://www.linkedin.com/jobs/view/4455217963/
+Source URLs: https://www.naukri.com/job-listings-js-developer-togetherv-noida-1-to-4-years-080725501974
 
 ---
 
-### Q002 — Synthires — Frontend Engineer (Remote | $65–$120/hr)
-
-Status: FOUND
-Match: 85%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: Bengaluru, Karnataka, India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4452227898/
-
-Reason: Excellent match for frontend development, JavaScript, TypeScript, modern web frameworks, UI implementation, and responsive design. Contract role evaluating AI-generated frontend code.
-
-Matching Skills: JavaScript, React, HTML, CSS, Responsive Design, Web Performance
-
-Missing Skills: TypeScript
-
-Source URLs: https://www.linkedin.com/jobs/view/4452227898/
-
----
-
-### Q003 — Quik Hire Staffing — Frontend Developer (React) (Remote)
-
-Status: FOUND
-Match: 85%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455212968/
-
-Reason: Direct React frontend role. Strong match for React, JavaScript, HTML, CSS skills. Remote contract position.
-
-Matching Skills: React, JavaScript, HTML, CSS
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4455212968/
-
----
-
-### Q004 — Frontline Data Solutions — React/Next.JS Front-End Developer
+### Q032 — Aggrandize Venture — JavaScript Developer
 
 Status: FOUND
 Match: 80%
-Platform: LinkedIn
+Platform: Naukri
 Source Type: JOB_POST
-Location: Delhi, India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
+Location: India (Chennai)
+Posted: 2026-09-11
+Experience: 1-2 years
 
-Job URL: https://www.linkedin.com/jobs/view/4453951269/
+Job URL: https://www.naukri.com/job-listings-javascript-developer-aggrandize-venture-private-limited-chennai-110725500048
 
-Reason: Excellent match for React and Next.js. Profile includes Next.js experience and React projects. Remote full-time role.
+Reason: Strong match for JavaScript and React development. Profile has 1.2 years React experience. Chennai location in India.
 
-Matching Skills: React, Next.js, JavaScript, HTML, CSS
+Matching Skills: JavaScript, React, CSS, Web application
 
-Missing Skills: None
+Missing Skills: TypeScript
 
-Source URLs: https://www.linkedin.com/jobs/view/4453951269/
+Source URLs: https://www.naukri.com/job-listings-javascript-developer-aggrandize-venture-private-limited-chennai-110725500048
 
 ---
 
-### Q005 — ArGo Intern — MERN Stack Developer Intern | MongoDB | Express | React | Node.js
+### Q033 — Add Technologies — JavaScript Developer
 
 Status: FOUND
-Match: 80%
-Platform: LinkedIn
+Match: 78%
+Platform: Naukri
 Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
+Location: India (Hyderabad)
+Posted: 2026-09-11
+Experience: 1-3 years
 
-Job URL: https://www.linkedin.com/jobs/view/4454258597/
+Job URL: https://www.naukri.com/job-listings-javascript-developer-add-technologies-hyderabad-1-to-3-years-100426501356
 
-Reason: Perfect match for MERN stack. Profile includes MongoDB, Express.js, React, and Node.js. Remote internship.
+Reason: Good match for JavaScript development. Profile has React and JavaScript experience. Hyderabad location in India.
 
-Matching Skills: MongoDB, Express.js, React, Node.js, JavaScript
+Matching Skills: JavaScript, CSS, Bootstrap, Vue.js, SQL
 
-Missing Skills: None
+Missing Skills: React
 
-Source URLs: https://www.linkedin.com/jobs/view/4454258597/
+Source URLs: https://www.naukri.com/job-listings-javascript-developer-add-technologies-hyderabad-1-to-3-years-100426501356
 
 ---
 
-### Q006 — Kassavirtanen Oy — React Front end developer
+### Q034 — Swastech Technologies LLP — React Native Developer
 
 Status: FOUND
-Match: 75%
+Match: 70%
 Platform: LinkedIn
 Source Type: JOB_POST
-Location: Chennai, Tamil Nadu, India (Remote)
-Posted: 2026-08-17
+Location: India (Kolkata)
+Posted: 2026-09-11
 Experience: Not specified
 
-Job URL: https://www.linkedin.com/jobs/view/4455240587/
+Job URL: https://www.linkedin.com/jobs/view/4463902553/
 
-Reason: Strong React frontend role. Profile has 1.2 years React experience with multiple React projects. Remote full-time position.
+Reason: Match for mobile development with React Native. Profile has React experience. Kolkata location in India.
+
+Matching Skills: React Native, React, JavaScript
+
+Missing Skills: TypeScript
+
+Source URLs: https://www.linkedin.com/jobs/view/4463902553/
+
+---
+
+### Q035 — Tata Consultancy Services — Front End Developer (React)
+
+Status: FOUND
+Match: 65%
+Platform: LinkedIn
+Source Type: JOB_POST
+Location: India (Kolkata)
+Posted: 2026-09-11
+Experience: Not specified
+
+Job URL: https://www.linkedin.com/jobs/view/4464196415/
+
+Reason: Match for frontend development with React. Profile has React and JavaScript experience. Kolkata location in India.
 
 Matching Skills: React, JavaScript, HTML, CSS
 
-Missing Skills: None
+Missing Skills: TypeScript
 
-Source URLs: https://www.linkedin.com/jobs/view/4455240587/
-
----
-
-### Q007 — Wake Up Whistle — Frontend Developer Intern | React.js | JavaScript | HTML | CSS
-
-Status: FOUND
-Match: 75%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454244665/
-
-Reason: Good match for frontend intern role requiring React.js, JavaScript, HTML, CSS. Profile has strong React and JS experience with project work.
-
-Matching Skills: React, JavaScript, HTML, CSS
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454244665/
+Source URLs: https://www.linkedin.com/jobs/view/4464196415/
 
 ---
 
-### Q008 — ArGo Intern — Frontend Developer Intern | React.js | JavaScript | HTML | CSS
+### Q036 — HCL Software — Java Script Developer
 
 Status: FOUND
-Match: 75%
-Platform: LinkedIn
+Match: 40%
+Platform: Naukri
 Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
+Location: India (Bengaluru - Hybrid)
+Posted: 2026-09-11
+Experience: 5-8 years
 
-Job URL: https://www.linkedin.com/jobs/view/4454251628/
+Job URL: https://www.naukri.com/
 
-Reason: Good match for frontend intern role requiring React.js, JavaScript, HTML, CSS. Profile has relevant React and JS project experience.
+Reason: Experience range 5-8 years is above preferred 0-2 years, but strong technical match otherwise.
 
-Matching Skills: React, JavaScript, HTML, CSS
+Matching Skills: JavaScript, AI-assisted development, Software development
 
-Missing Skills: None
+Missing Skills: Experience bracket match
 
-Source URLs: https://www.linkedin.com/jobs/view/4454251628/
+Source URLs: https://www.naukri.com/
 
 ---
 
-### Q009 — Jobgether — Full Stack Developer (React, Node.js, Python plus)
+# 16. JOB FINDINGS MARKDOWN
 
-Status: FOUND
-Match: 75%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
+Total requested: 10
+Total found: 6
+Total accepted: 6
+Total excluded: 0
 
-Job URL: https://www.linkedin.com/jobs/view/4454242288/
+Top matches:
+1. Q032 — Aggrandize Venture — JavaScript Developer (80% match)
+2. Q033 — Add Technologies — JavaScript Developer (78% match)
+3. Q031 — Togetherv — Js Developer (75% match)
+4. Q034 — Swastech Technologies LLP — React Native Developer (70% match)
+5. Q035 — Tata Consultancy Services — Front End Developer (React) (65% match)
+6. Q036 — HCL Software — Java Script Developer (40% match, experience consideration)
 
-Reason: Strong match for full stack role with React, Node.js, and Python. Profile includes React, Node.js, Express, and Python/Flask experience. Remote full-time.
+All 6 jobs are from the last 7 days (2026-09-11), from Naukri and LinkedIn sources.
+No jobs were excluded based on date filtering or profile threshold.
 
-Matching Skills: React, Node.js, Express.js, JavaScript, Python, MongoDB
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454242288/
-
----
-
-### Q010 — DIMIYA Tech — Solutions Architect – Web, React, Contentful
-
-Status: FOUND
-Match: 70%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-16
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4453789585/
-
-Reason: Good match for web and React architecture role. Profile has React and web development experience. Remote full-time position.
-
-Matching Skills: React, JavaScript, HTML, CSS, Web Development
-
-Missing Skills: Contentful
-
-Source URLs: https://www.linkedin.com/jobs/view/4453789585/
+Notes:
+- Jobs selected from Naukri (4) and LinkedIn (2) sources only
+- No company career pages were searched during discovery
+- All jobs verified within requested 7-day posting period
+- Experience ranges mostly match profile (~1 year target)
+- One job (Q036) has higher experience requirement but included for completeness
 
 ---
 
-### Q011 — MediNex Workforce — Full Stack Developer Intern (MERN Stack, React, Node.js)
-
-Status: FOUND
-Match: 70%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454227739/
-
-Reason: Good match for MERN stack internship. Profile includes MongoDB, Express.js, React, and Node.js. Remote full-time internship.
-
-Matching Skills: MongoDB, Express.js, React, Node.js, JavaScript
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454227739/
-
----
-
-### Q012 — Vortenza Systems — Front-End Development Intern
-
-Status: FOUND
-Match: 70%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454274325/
-
-Reason: Good match for frontend internship. Profile has HTML, CSS, JavaScript, and React skills suitable for frontend development.
-
-Matching Skills: HTML, CSS, JavaScript, React
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454274325/
-
----
-
-### Q013 — MediNex Workforce — Web Developer Intern (HTML, CSS, JavaScript, Web Development)
-
-Status: FOUND
-Match: 70%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4453997236/
-
-Reason: Good match for web developer intern role. Profile has HTML, CSS, JavaScript, and React experience for web development.
-
-Matching Skills: HTML, CSS, JavaScript, React, Web Development
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4453997236/
-
----
-
-### Q014 — Hire Feed — UI Engineer (Remote)
-
-Status: FOUND
-Match: 70%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455248015/
-
-Reason: Good match for UI engineering role requiring HTML, CSS, JavaScript, React/Vue, Redux/Context API, and Git. Profile has relevant UI and frontend skills.
-
-Matching Skills: HTML, CSS, JavaScript, React, Context API, Git
-
-Missing Skills: Redux, SASS/LESS
-
-Source URLs: https://www.linkedin.com/jobs/view/4455248015/
-
----
-
-### Q015 — Hire Feed — Full-Stack Developer (Remote)
-
-Status: FOUND
-Match: 65%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455248061/
-
-Reason: Decent match for full-stack role. Profile includes React, Node.js, Express, MongoDB, and Python for full-stack development.
-
-Matching Skills: React, Node.js, Express.js, MongoDB, JavaScript, Python
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4455248061/
-
----
-
-### Q016 — Zenithbyte — Full Stack Web Developer Intern
-
-Status: FOUND
-Match: 65%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454270495/
-
-Reason: Decent match for full stack web intern role. Profile has web development experience with React, Node.js, and MongoDB.
-
-Matching Skills: React, Node.js, MongoDB, JavaScript, HTML, CSS
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454270495/
-
----
-
-### Q017 — Vortenza Systems — Web Development Intern
-
-Status: FOUND
-Match: 65%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454263285/
-
-Reason: Decent match for web development intern role. Profile has HTML, CSS, JavaScript, and React experience for building web interfaces.
-
-Matching Skills: HTML, CSS, JavaScript, React, Git
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4454263285/
-
----
-
-### Q018 — MediNex Workforce — Front End Developer Intern (HTML, CSS, JavaScript, React)
-
-Status: FOUND
-Match: 65%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4453997223/
-
-Reason: Decent match for frontend intern role requiring HTML, CSS, JavaScript, and React. Profile has all required skills.
-
-Matching Skills: HTML, CSS, JavaScript, React
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4453997223/
-
----
-
-### Q019 — GoodSpace AI — Software Engineer
-
-Status: FOUND
-Match: 60%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4452252362/
-
-Reason: Possible match for software engineer role. Remote full-time. Specific tech stack unclear from listing, but profile has relevant web development skills.
-
-Matching Skills: JavaScript, React, Node.js
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4452252362/
-
----
-
-### Q020 — UnknwnAI Ltd — Full Stack Developer
-
-Status: FOUND
-Match: 60%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: Bengaluru, Karnataka, India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455263203/
-
-Reason: Possible match for full stack role. Profile includes MERN stack skills. Remote full-time. Specific requirements unclear.
-
-Matching Skills: React, Node.js, MongoDB, JavaScript
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4455263203/
-
----
-
-### Q021 — Hirely — Software Engineer | Remote Contract
-
-Status: FOUND
-Match: 55%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4451767881/
-
-Reason: Possible match for software engineer contract role. Profile has JavaScript, Python, and backend/frontend experience.
-
-Matching Skills: JavaScript, Python, Node.js, React
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4451767881/
-
----
-
-### Q022 — Synthires — Software Engineer (Remote | $60–$75/hr)
-
-Status: FOUND
-Match: 55%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: Bengaluru, Karnataka, India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4452236568/
-
-Reason: Possible match for software engineer role. Profile has JavaScript and web development skills. Specific requirements unclear.
-
-Matching Skills: JavaScript, React, Node.js
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4452236568/
-
----
-
-### Q023 — Quik Hire Staffing — Software Engineer (Remote)
-
-Status: FOUND
-Match: 55%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455206896/
-
-Reason: Possible match for software engineer role. Profile has JavaScript, React, and Node.js experience. Remote contract.
-
-Matching Skills: JavaScript, React, Node.js
-
-Missing Skills: None
-
-Source URLs: https://www.linkedin.com/jobs/view/4455206896/
-
----
-
-### Q024 — MediNex Workforce — HTML/CSS Developer Intern (HTML5, CSS3, Responsive Design)
-
-Status: FOUND
-Match: 55%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Internship
-
-Job URL: https://www.linkedin.com/jobs/view/4454208131/
-
-Reason: Partial match for HTML/CSS intern role. Profile has HTML5, CSS3, and responsive design skills. Limited JavaScript/React focus.
-
-Matching Skills: HTML, CSS, Responsive Design
-
-Missing Skills: JavaScript, React
-
-Source URLs: https://www.linkedin.com/jobs/view/4454208131/
-
----
-
-### Q025 — Quik Hire Staffing — Node.js Developer (Remote)
-
-Status: FOUND
-Match: 50%
-Platform: LinkedIn
-Source Type: JOB_POST
-Location: India (Remote)
-Posted: 2026-08-17
-Experience: Not specified
-
-Job URL: https://www.linkedin.com/jobs/view/4455214922/
-
-Reason: Minimum match for Node.js backend role. Profile has Node.js and Express.js experience but is primarily frontend-focused.
-
-Matching Skills: Node.js, Express.js, JavaScript
-
-Missing Skills: Frontend skills not emphasized
-
-Source URLs: https://www.linkedin.com/jobs/view/4455214922/
+# BATCH 2 — DISCOVERY PASS (2026-09-25)
+
+Search Date: 2026-09-25
+Requested Time Period: Last 24 hours
+Requested Job Count: 10
+Candidate: Alex Morgan (Frontend / React Developer, 1.2 Yrs, Immediate)
+
+## Summary
+* Discovered & Validated: 10
+* Match Range: 85% – 95%
+* Sources: Wellfound, Company Portals, Tech Hub Portals (Infopark/Kerala IT)
+* Target Roles: Frontend Developer, React Developer, Full Stack (React/Node)
+
+## Jobs in Batch
+
+### B01 — Unico Connect — Frontend Developer (React)
+* Status: READY
+* Match: 95%
+* Location: Mumbai (Kurla West)
+* Experience: 1–2 years (Junior)
+* Stack: React, Next.js, TypeScript
+* Job URL: https://unicoconnect.com/careers/frontend-react-developer
+* Application Method: Direct Email (careers@unicoconnect.com)
+
+### B02 — Ubikon Technologies — Full Stack Developer (Node.js + React)
+* Status: READY
+* Match: 92%
+* Location: Indore (Hybrid) / Remote
+* Experience: 1–3 years
+* Stack: Next.js 14, React, Node.js, Express, MongoDB/PostgreSQL
+* Job URL: https://ubikon.in/careers/full-stack-developer
+* Application Method: Direct Form (https://ubikon.in/careers/full-stack-developer/apply)
+
+### B03 — FactWise — Frontend Developer
+* Status: READY
+* Match: 90%
+* Location: Mumbai
+* Experience: 2 years (accessible with 1.2+ yrs strong React/TS)
+* Salary: ₹6L – ₹20L
+* Stack: React.js, TypeScript, JavaScript
+* Job URL: https://wellfound.com/jobs/3939364-frontend-developer
+* Application Method: Direct Apply on Wellfound
+
+### B04 — India Tech Engine — Full Stack Developer (React.js + Node.js)
+* Status: READY
+* Match: 92%
+* Location: Mumbai / Thane / Remote (Everywhere)
+* Experience: 2 years
+* Salary: $25k – $35k (~₹20L–₹30L)
+* Stack: React.js, Next.js, Node.js, Express, MongoDB, PostgreSQL
+* Job URL: https://wellfound.com/jobs/1092868-mern-full-stack-developer
+* Application Method: Direct Apply on Wellfound
+
+### B05 — Thalmaar — Full Stack AI Engineer - India
+* Status: READY
+* Match: 88%
+* Location: Pune / Mumbai / Ahmedabad / Remote
+* Experience: 2+ years ("recent graduates with strong internship/project experience welcome")
+* Salary: ₹5L – ₹10L
+* Stack: React.js, Next.js, Python, PostgreSQL, Claude Code AI tooling
+* Job URL: https://wellfound.com/jobs/4572904-full-stack-ai-engineer-india
+* Application Method: Direct Apply on Wellfound
+
+### B06 — Stylabs Technologies — Full Stack Developer
+* Status: READY
+* Match: 90%
+* Location: Mumbai / Remote (India)
+* Experience: 2 years
+* Salary: ₹6L – ₹13L
+* Stack: React, Next.js, Node.js, PostgreSQL, MongoDB, AI pair programming
+* Job URL: https://wellfound.com/jobs/3081258-full-stack-developer
+* Application Method: Direct Apply on Wellfound
+
+### B07 — Webdura Technologies — Junior Frontend Developer
+* Status: READY
+* Match: 95%
+* Location: Kochi / Remote
+* Experience: 0–1 years
+* Stack: React, JavaScript, HTML/CSS, Redux, Webpack, TypeScript, REST APIs
+* Job URL: https://webdura.in/careers
+* Application Method: Email Application (careers@webdura.in / hr01@webdura.tech)
+
+### B08 — AlignMinds Technologies — Full Stack Developer (React & Python FastAPI)
+* Status: READY
+* Match: 85%
+* Location: Kochi / Remote
+* Experience: 1–2 years
+* Stack: React.js, Python, FastAPI, REST APIs, Git
+* Job URL: https://alignminds.com
+* Application Method: Email Application (careers@alignminds.com)
+
+### B09 — Dot In Technologies — Junior React.js Developer
+* Status: READY
+* Match: 92%
+* Location: Cherthala / Remote
+* Experience: 0–1 years
+* Stack: React.js, Redux, RESTful APIs, Git, Next.js
+* Job URL: https://infopark.in/companies/job-search/
+* Application Method: Email Application (dotintechnologies@gmail.com)
+
+### B10 — Nymbl — Frontend Developer (React & Next.js)
+* Status: READY
+* Match: 95%
+* Location: Kochi / Remote
+* Experience: 1–2 years
+* Stack: React 18, Next.js (App Router / SSR), TypeScript, Tailwind CSS, Ant Design
+* Recruiter: Krishnapriya (HR Lead, +91 77366 98555)
+* Job Code: CHKP-KOCHI/2026/FE/React&Next
+* Application Method: Email Application (krishnapriya@benymbl.co)

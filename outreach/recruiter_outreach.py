@@ -55,8 +55,8 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent          # <PROJECT_ROOT>\outreach
-ROOT = BASE.parent                              # <PROJECT_ROOT>
+BASE = Path(__file__).resolve().parent          # D:\newjobs\outreach
+ROOT = BASE.parent                              # D:\newjobs
 ENGINE_JOBS_FILE = ROOT / "autoapply" / "jobs.json"
 HTML_FILE = BASE / "recruiter_outreach.html"
 QUEUE_FILE = BASE / "recruiter_outreach.json"
@@ -79,12 +79,12 @@ DEFAULT_CONFIG = {
     "smtp_port": 587,
     "imap_host": "imap.gmail.com",
     "imap_port": 993,
-    "sender_name": "Your Name",
-    "sender_phone": "+91 98XXXXXXXX",
-    "sender_email_fallback": "your.email@example.com",
-    "sender_linkedin": "https://www.linkedin.com/in/your-profile/",
-    "sender_github": "https://github.com/your-username/",
-    "sender_portfolio": "https://your-portfolio.example.com/",
+    "sender_name": "Alex Morgan",
+    "sender_phone": "+91 9876543210",
+    "sender_email_fallback": "candidate@example.com",
+    "sender_linkedin": "https://www.linkedin.com/in/developer-portfolio01/",
+    "sender_github": "https://github.com/developer-portfolio/",
+    "sender_portfolio": "https://developer-portfolio.vercel.app/",
     "resume_files": {
         "default": str(ROOT / "Resume.pdf"),
         "react": str(ROOT / "Resume.pdf"),

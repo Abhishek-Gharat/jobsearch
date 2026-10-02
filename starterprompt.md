@@ -533,6 +533,41 @@ job-findings.md
 The JSON is the machine-readable job queue.
 
 The Markdown is the human-readable report.
+## 15a. HOW TO WRITE THE QUEUE (mandatory)
+
+**Never write `excel-rows.json` with a raw file-write.** Doing so has already
+destroyed this queue once: the array was left half-written (trailing `},`, no
+closing `]`), `json.loads` failed for every consumer, and the queue had to be
+rebuilt by hand. `bos.py` had the same bug (`open(QUEUE, "w")` truncates the file
+the moment it opens).
+
+Always write through the shared store, which validates the structure before
+persisting, writes atomically, and keeps a rolling backup:
+
+```bash
+python D:\newjobs\queue_store.py check     # validate, show status counts
+python D:\newjobs\queue_store.py repair    # rewrite a truncated queue as valid JSON
+```
+
+From Python:
+
+```python
+import sys; sys.path.insert(0, r"D:\newjobs")
+import queue_store
+
+rows = queue_store.load()            # tolerant read; warns + salvages if corrupt
+rows.append(new_job)                 # every row needs queueId, company, role, jobUrl, status
+queue_store.save(rows)               # atomic + validated + .bak; raises on a bad row
+```
+
+`save()` refuses, rather than persists, a row that is missing `queueId`,
+`company`, `role` or `jobUrl`, uses an unknown status, duplicates a `queueId`, or
+would shrink the queue. If it raises, fix the row — do not bypass it.
+
+`status` must be one of: `UNPROCESSED`, `PENDING`, `READY`, `IN_PROGRESS`,
+`SUBMITTED`, `SKIPPED`, `PENDING_HUMAN`, `FAILED`, `NOT_PROCESSED`.
+
+---
 
 ---
 
@@ -621,4 +656,4 @@ Do not start applying.
 This agent's only responsibility is:
 
 FIND → VALIDATE → MATCH → DEDUPLICATE → RANK → SAVE
-<PROJECT_ROOT>\exicutionrules.md   and <PROJECT_ROOT>\Resume.pdf <PROJECT_ROOT>\Job_Profile.TEMPLATE.md
+D:\newjobs\exicutionrules.md   and [D:\newjobs\Resume.pdf](file:///D:/newjobs/Resume.pdf) D:\newjobs\Job_Profile.TEMPLATE.md

@@ -1,6 +1,6 @@
 import json, os
 
-store_file = r"<PROJECT_ROOT>\control-center\data\excel-rows.json"
+store_file = r"D:\newjobs\control-center\data\excel-rows.json"
 with open(store_file, "r", encoding="utf-8") as f:
     store = json.load(f)
 

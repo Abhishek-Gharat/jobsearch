@@ -1,0 +1,51 @@
+{
+  "name": "Alex Morgan",
+  "first_name": "Alex",
+  "last_name": "Morgan",
+  "email": "candidate@example.com",
+  "phone": "9876543210",
+  "phone_with_country": "+1 555-0100",
+  "country_code": "+1",
+  "country": "United States",
+  "location": "San Francisco, CA",
+  "city": "San Francisco",
+  "total_experience_years": 2.0,
+  "experience_label": "2+ years",
+  "availability": "Immediate",
+  "notice_period_days": 0,
+  "current_ctc_lpa": 0,
+  "expected_ctc_lpa": 0,
+  "target_roles": [
+    "Frontend Developer",
+    "React Developer",
+    "Full Stack Engineer",
+    "Software Engineer"
+  ],
+  "core_skills": [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "REST APIs",
+    "Redux Toolkit",
+    "Tailwind CSS",
+    "Node.js",
+    "Git"
+  ],
+  "education": {
+    "graduation": {
+      "degree": "B.S. in Computer Science",
+      "institution": "State University",
+      "years": "2020-2024",
+      "score": "3.8 GPA"
+    }
+  },
+  "urls": {
+    "linkedin": "https://www.linkedin.com/in/candidate/",
+    "github": "https://github.com/candidate",
+    "portfolio": "https://candidate-portfolio.example.com"
+  },
+  "resume_pdf": "Resume.pdf",
+  "current_role": "Frontend Developer",
+  "company": "Tech Solutions"
+}

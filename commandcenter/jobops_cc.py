@@ -24,8 +24,8 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent          # <PROJECT_ROOT>\commandcenter
-ROOT = BASE.parent                              # <PROJECT_ROOT>
+BASE = Path(__file__).resolve().parent          # D:\newjobs\commandcenter
+ROOT = BASE.parent                              # D:\newjobs
 ENGINE = ROOT / "autoapply"
 OUTREACH_DIR = ROOT / "outreach"
 HTML_FILE = BASE / "index.html"
@@ -874,7 +874,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(e.code, {"error": f"upstream_{e.code}"})
         except Exception:
             return self._json(503, {"error": "outreach_server_offline",
-                                    "detail": "Start it: cd <PROJECT_ROOT>\\outreach && python recruiter_outreach.py serve"})
+                                    "detail": "Start it: cd D:\\newjobs\\outreach && python recruiter_outreach.py serve"})
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         route = parsed.path

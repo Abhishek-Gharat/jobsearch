@@ -96,7 +96,7 @@ def main(only_new=True):
         write(d/"role_summary.md",
               f"# Role Summary — {ctx['role']}\n\nLocation: {ctx['location']}\nPortal: {ctx['portal']}\n\n"
               f"Re-read the original JD before the call; map each requirement to one line of "
-              f"your real experience (EXAMPLE-COMPANY Collection System / Example Company B e-commerce / REACTVIZ).\n")
+              f"your real experience (HRIDAYAM Collection System / Gnapika e-commerce / REACTVIZ).\n")
         write(d/"tech_stack.md",
               f"# Likely Stack — {co}\n\nFrom posting signals: React ecosystem confirmed by JD scan.\n"
               f"Prepare talking points bridging: React/Next.js UI work -> REST integration -> "

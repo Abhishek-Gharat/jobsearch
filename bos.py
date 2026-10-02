@@ -1,8 +1,15 @@
 """
 BrowserOS neo MCP driver for the job-application pipeline.
 
-Talks to the local BrowserOS neo MCP server (Streamable HTTP on 127.0.0.1:9211/mcp)
-without needing the WorkBuddy MCP tools to be registered in-session.
+Talks to the local BrowserOS neo MCP server (Streamable HTTP) without needing
+MCP tools to be registered in-session.
+
+THE PORT MOVES. The same BrowserOS neo browser instance has been seen serving on
+several ports over time (9211 as documented in RUN-NEXT.md, 9210 as hardcoded in
+the outreach scripts, 9010 current). 9210 and 9010 were both verified live and
+identical - same window id, same tabs, serverInfo `browseros-neo` v0.0.50 - so
+pinning a dead port here silently breaks every browser step. Override with the
+BROWSEROS_PORT / BROWSEROS_HOST env vars.
 
 IMPORTANT: MCP pages are owned by the session that created them, so every multi-step
 flow must run inside a single process invocation. One bash call = one session.
@@ -13,7 +20,6 @@ Commands:
 """
 
 import argparse
-from pathlib import Path
 import http.client
 import json
 import os
@@ -22,9 +28,12 @@ import socket
 import sys
 import time
 
-HOST, PORT, PATH = "127.0.0.1", 9211, "/mcp"
-BASE_DIR = Path(__file__).resolve().parent
-QUEUE = str(BASE_DIR / "excel-rows.json")
+import queue_store
+
+HOST = os.environ.get("BROWSEROS_HOST", "127.0.0.1")
+PORT = int(os.environ.get("BROWSEROS_PORT", "9010"))
+PATH = "/mcp"
+QUEUE = r"D:\newjobs\excel-rows.json"
 
 DEAD_PHRASES = (
     "no longer accepting", "expired", "no longer available",
@@ -39,19 +48,19 @@ SUCCESS_PHRASES = (
 BLOCK_PHRASES = ("captcha", "recaptcha", "verify you are human", "one-time code", "enter the code")
 
 RESUME_CANDIDATES = (
-    str(Path.home() / "Downloads" / "Resume.docx"),
-    str(BASE_DIR / "Resume.pdf"),
+    r"C:\Users\ASUS\Downloads\Resume.docx",
+    r"D:\newjobs\Resume.pdf",
 )
 
 FIELD_VALUES = [
-    (("first name", "firstname", "given name"), "YourFirstName"),
-    (("last name", "lastname", "surname", "family name"), "YourLastName"),
-    (("full name", "your name", "name"), "Your Name"),
-    (("email", "e-mail"), "your.email@example.com"),
-    (("phone", "mobile", "contact number", "whatsapp"), "98XXXXXXXX"),
-    (("linkedin",), "https://www.linkedin.com/in/your-profile/"),
-    (("github",), "https://github.com/your-username/"),
-    (("portfolio", "website", "personal site", "blog"), "https://your-portfolio.example.com/"),
+    (("first name", "firstname", "given name"), "Alex"),
+    (("last name", "lastname", "surname", "family name"), "Morgan"),
+    (("full name", "your name", "name"), "Alex Morgan"),
+    (("email", "e-mail"), "candidate@example.com"),
+    (("phone", "mobile", "contact number", "whatsapp"), "9876543210"),
+    (("linkedin",), "https://www.linkedin.com/in/developer-portfolio01/"),
+    (("github",), "https://github.com/developer-portfolio/"),
+    (("portfolio", "website", "personal site", "blog"), "https://developer-portfolio.vercel.app/"),
     (("city", "current location", "location"), "Mumbai"),
     (("expected ctc", "expected salary", "desired salary"), "5.5"),
     (("current ctc", "current salary"), "3"),
@@ -74,26 +83,55 @@ def pick_resume():
 
 
 def load_queue():
-    with open(QUEUE, encoding="utf-8-sig") as f:
-        return json.load(f)
+    """Master queue via the safe store. Tolerates (and warns about) a truncated file."""
+    return queue_store.load(queue_store.QUEUE, quiet=False)
 
 
 def save_queue(jobs):
-    with open(QUEUE, "w", encoding="utf-8") as f:
-        json.dump(jobs, f, indent=4, ensure_ascii=False)
+    """Atomic, validated write. Refuses to persist a malformed or shrunken queue.
+
+    The previous open(QUEUE, "w") + json.dump() pattern truncated the file the
+    moment it opened, so a crash mid-write left a half-written array that no
+    consumer could parse. queue_store handles temp-file + os.replace instead.
+    """
+    return queue_store.save(jobs, queue_store.QUEUE)
 
 
-class BOS:
+def find_active_port(host="127.0.0.1", default_port=9010) -> int:
+    env_p = os.environ.get("BROWSEROS_PORT")
+    if env_p:
+        try:
+            return int(env_p)
+        except ValueError:
+            pass
+    ports = [default_port, 9010, 9210, 9211]
+    seen = set()
+    for p in ports:
+        if p in seen:
+            continue
+        seen.add(p)
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(0.4)
+            s.connect((host, p))
+            s.close()
+            return p
+        except Exception:
+            pass
+    return default_port
+
+class BrowserOSMCP:
     """One BrowserOS neo MCP session."""
 
     def __init__(self, label="workbuddy-jobs"):
         self.cid = 0
         self.sid = None
+        self.port = find_active_port(HOST, PORT)
         obj = self._post({"jsonrpc": "2.0", "id": self._n(), "method": "initialize", "params": {
             "protocolVersion": "2024-11-05", "capabilities": {},
             "clientInfo": {"name": label, "version": "1.0"}}})
         if obj is None:
-            raise RuntimeError("MCP initialize failed - is BrowserOS neo running?")
+            raise RuntimeError(f"MCP initialize failed on port {self.port} - is BrowserOS neo running?")
         self._post({"jsonrpc": "2.0", "method": "notifications/initialized"})
 
     def _n(self):
@@ -106,7 +144,7 @@ class BOS:
                    "Accept": "application/json, text/event-stream"}
         if self.sid:
             headers["Mcp-Session-Id"] = self.sid
-        conn = http.client.HTTPConnection(HOST, PORT, timeout=60)
+        conn = http.client.HTTPConnection(HOST, self.port, timeout=60)
         try:
             conn.request("POST", PATH, body=body, headers=headers)
             resp = conn.getresponse()
@@ -168,6 +206,43 @@ class BOS:
     def read(self, page):
         text, ok = self.call("read", {"page": page, "format": "text"})
         return text if ok else ""
+
+
+def BOS(label="workbuddy-jobs"):
+    """Browser driver factory.
+
+    Default: BrowserOS neo MCP session (BrowserOSMCP). If BrowserOS is not active
+    on port 9010/9210 but Fortress stealth Chromium is running on :9222, or if
+    BROWSER_ENGINE=fortress is set, returns fortress_bos.FortressBOS automatically.
+    """
+    engine = os.environ.get("BROWSER_ENGINE", "").strip().lower()
+    if engine in ("fortress", "cdp", "stealth"):
+        from fortress_bos import FortressBOS
+        return FortressBOS(label)
+
+    # Check if BrowserOS is actively listening
+    port = find_active_port(HOST, PORT)
+    bos_live = False
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(0.3)
+        if s.connect_ex((HOST, port)) == 0:
+            bos_live = True
+        s.close()
+    except Exception:
+        pass
+
+    if bos_live:
+        return BrowserOSMCP(label)
+
+    # BrowserOS is down -> auto-dispatch to Fortress (which auto-launches Chromium if needed)
+    try:
+        from fortress_bos import FortressBOS
+        return FortressBOS(label)
+    except Exception as e:
+        print(f"[BOS] Note: Fortress auto-fallback failed ({e}); falling back to BrowserOSMCP")
+
+    return BrowserOSMCP(label)
 
 
 REF_RE = re.compile(r'\[ref=(e\d+)\]')

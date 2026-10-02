@@ -1,8 +1,8 @@
 # Telegram → Job Hunt Reports
 
-`telegram_reports.py` pushes every report in `<PROJECT_ROOT>` to a Telegram chat.
+`telegram_reports.py` pushes every report in `D:\newjobs` to a Telegram chat.
 Stdlib only — no pip install. Works with any Python 3.8+.
-
+ opencode -s ses_f74bda74fffew0HdMmlRbNcTB7
 ---
 
 ## Part 1 — Get your credentials (2 min, one time)
@@ -11,7 +11,7 @@ Stdlib only — no pip install. Works with any Python 3.8+.
 1. Open Telegram, search **@BotFather**, press Start.
 2. Send `/newbot`
 3. Pick a display name → `Job Hunt Reports`
-4. Pick a username → must end in `bot`, e.g. `yourname_jobhunt_bot`
+4. Pick a username → must end in `bot`, e.g. `my_jobhunt_bot`
 5. BotFather replies with an **HTTP API token** that looks like:
    `7123456789:AAFxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
    Copy it. That's your `--token`.
@@ -33,7 +33,7 @@ That's your `--chat`.
 ```bash
 python telegram_reports.py setup --token 7123456789:AAFxxxx... --chat 987654321
 ```
-Saved to `<PROJECT_ROOT>\.telegram.json` (chmod 600). Env vars
+Saved to `D:\newjobs\.telegram.json` (chmod 600). Env vars
 `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` override it if you'd rather not store on disk.
 
 ### 5. Verify
@@ -137,7 +137,7 @@ cannot use it. A PID lock stops a second instance from fighting over polling.
 - **Long messages** auto-split at 3,800 chars and numbered `1/3`, `2/3`. Telegram's hard limit is 4,096.
 - **Rate limits** are handled — 429s wait `retry_after` and retry; sends are spaced 0.6s apart.
 - **Failures are non-fatal** — a bad report never blocks the others.
-- **Logs** go to `<PROJECT_ROOT>\telegram_reports.log`.
+- **Logs** go to `D:\newjobs\telegram_reports.log`.
 - **Shared credentials** — `autoapply/telegram_notifier.py` (the job sniper's live alerts)
   now reads the same `.telegram.json`, so you configure Telegram once for the whole project.
 - **Secrets** — `.telegram.json` holds your bot token. Don't commit it.
@@ -147,13 +147,13 @@ cannot use it. A PID lock stops a second instance from fighting over polling.
 Daily digest every morning at 09:00:
 ```
 Automation: recurring, FREQ=DAILY;BYHOUR=9;BYMINUTE=0
-Prompt: Run `python <PROJECT_ROOT>\telegram_reports.py digest`
+Prompt: Run `python D:\newjobs\telegram_reports.py digest`
 ```
 
 Weekday evening wrap-up with every report attached:
 ```
 Automation: recurring, FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;BYHOUR=21;BYMINUTE=0
-Prompt: Run `python <PROJECT_ROOT>\telegram_reports.py send-all --doc`
+Prompt: Run `python D:\newjobs\telegram_reports.py send-all --doc`
 ```
 
 Live push while the pipeline runs:

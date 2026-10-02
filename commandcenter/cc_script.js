@@ -84,7 +84,7 @@ async function pgOverview(view){
   updateSupPill(data.system.supervisor);
   const k=data.kpis;
   view.innerHTML=`
-   <div class="pagehead"><h1>Good ${new Date().getHours()<12?"morning":new Date().getHours()<17?"afternoon":"evening"}, there</h1>
+   <div class="pagehead"><h1>Good ${new Date().getHours()<12?"morning":new Date().getHours()<17?"afternoon":"evening"}, Alex</h1>
    <p>Everything below is generated from your existing engine data · refreshed ${fmtDT(data.generated_at)}</p></div>
 
    <section class="card in" style="border-color:#fecfc9">
@@ -366,7 +366,7 @@ async function pgDiscovery(view){
 let OSU_STATE={records:[],mailConfigured:false,dryrun:false};
 async function pgOutreach(view){
   const {status,data}=await api("/api/outreach/outreach");
-  if(status===503){view.innerHTML=`<div class="errbox"><b>Outreach server offline.</b> Start it in another terminal:<br><code>cd <PROJECT_ROOT>\\outreach && python recruiter_outreach.py serve</code><br><br>This Command Center never sends emails itself — every send is proxied to the approved outreach service which enforces the 12/day cap and 4-minute gap.</div>`;return}
+  if(status===503){view.innerHTML=`<div class="errbox"><b>Outreach server offline.</b> Start it in another terminal:<br><code>cd D:\\newjobs\\outreach && python recruiter_outreach.py serve</code><br><br>This Command Center never sends emails itself — every send is proxied to the approved outreach service which enforces the 12/day cap and 4-minute gap.</div>`;return}
   if(!ok2(status))throw new Error(data.error||"failed");
   OSU_STATE=data;
   const parents=data.records.filter(r=>r.kind!=="followup");
@@ -648,7 +648,7 @@ async function pgHealth(view){
      ${kpi(q.failed??"—","Failed",q.failed?"bad":"")}
      ${kpi(hb!=null?Math.round(hb)+"s":NA,"Heartbeat age",hb!=null&&hb<300?"good":hb==null?"bad":"warn")}
    </div>
-   ${(!data.supervisor.running)?`<div class="errbox"><b>Supervisor is not running.</b> Resume with <code>resume.bat</code> in <PROJECT_ROOT>\\autoapply — orphaned jobs are re-queued automatically.</div>`:""}
+   ${(!data.supervisor.running)?`<div class="errbox"><b>Supervisor is not running.</b> Resume with <code>resume.bat</code> in D:\\newjobs\\autoapply — orphaned jobs are re-queued automatically.</div>`:""}
    ${(data.unknown_state_jobs||[]).length?`<div class="errbox"><b>${data.unknown_state_jobs.length} jobs stuck in in_progress</b> (orphaned by killed workers): ${data.unknown_state_jobs.slice(0,8).map(j=>j.id).join(", ")}${data.unknown_state_jobs.length>8?"…":""}<br>Fix: set their status back to "pending" in jobs.json, or run resume.bat.</div>`:""}
    <div class="grid2">
    ${card("Worker / current batch",`

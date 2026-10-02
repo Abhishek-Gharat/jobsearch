@@ -1,6 +1,6 @@
 # Kilo Bridge
 
-A VS Code extension that lets the **Job Control Center** (`<PROJECT_ROOT>\control-center`)
+A VS Code extension that lets the **Job Control Center** (`D:\newjobs\control-center`)
 trigger **Kilo Code** tasks automatically — no AutoHotkey, no screen
 coordinates, no mouse clicks.
 
@@ -50,7 +50,7 @@ command execution → VS Code UI automation → keyboard simulation.
 npx -y @vscode/vsce package --allow-missing-repository
 
 # install into the normal VS Code installation
-code --install-extension <PROJECT_ROOT>\kilo-bridge\kilo-bridge-1.0.0.vsix --force
+code --install-extension D:\newjobs\kilo-bridge\kilo-bridge-1.0.0.vsix --force
 ```
 
 Then **reload** VS Code (`Developer: Reload Window`). The bridge activates
@@ -60,7 +60,7 @@ automatically - no dev host needed.
 Single instance: only the first window to bind port 3011 serves HTTP;
 every other window logs `EADDRINUSE` and disables its server (expected).
 
-Logs: `<PROJECT_ROOT>\kilo-bridge\logs\bridge.log` (rotated at 1 MB, kept as
+Logs: `D:\newjobs\kilo-bridge\logs\bridge.log` (rotated at 1 MB, kept as
 `bridge.log.old`), plus the `Kilo Bridge` output channel and `GET /debug`.
 
 ## API
@@ -146,7 +146,7 @@ end-to-end PASS/FAIL runbook.
 ## Requirements
 
 - VS Code with **Kilo Code** (`kilocode.kilo-code`) installed and enabled
-- Control Center running: `node server.js` in `<PROJECT_ROOT>\control-center`
+- Control Center running: `node server.js` in `D:\newjobs\control-center`
 - Kilo configured with the **BrowserOS MCP** server (already done)
 - Kilo signed in with a working model provider (shared account config)
 

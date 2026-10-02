@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 SERVER_URL = "http://127.0.0.1:3000/log"
-BASE_DIR = r"%USERPROFILE%\AppData\Local\BrowserClaw\Application\148.0.7988.97\.browseros\tool-output"
+BASE_DIR = r"C:\Users\ASUS\AppData\Local\BrowserClaw\Application\148.0.7988.97\.browseros\tool-output"
 
 def post_job(job, index, total):
     payload = {

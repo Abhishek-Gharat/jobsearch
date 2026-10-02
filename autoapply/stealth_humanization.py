@@ -400,7 +400,7 @@ if __name__ == "__main__":
 
     # 3. Typing simulation
     print("\n--- Typing Simulation ---")
-    test_text = "Your Name"
+    test_text = "Alex Morgan"
     events = humanized_type(test_text)
     typed_chars = sum(1 for e in events if e["kind"] in ("type", "press") and e.get("key", "") != "Backspace")
     typos = sum(1 for e in events if e["kind"] == "press" and e.get("key") == "Backspace")

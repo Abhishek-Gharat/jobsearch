@@ -4,7 +4,7 @@
 **VS Code:** 1.133.0
 **Date:** 2026-08-17
 **Method:** static inspection of `dist/extension.js` + `dist/webview.js` at
-`%USERPROFILE%\.vscode\extensions\kilocode.kilo-code-7.4.22-win32-x64`,
+`C:\Users\ASUS\.vscode\extensions\kilocode.kilo-code-7.4.22-win32-x64`,
 then **live execution** of every candidate command from the Kilo Bridge
 Extension Development Host, with outcome verified against Kilo's session
 database (`~/.local/share/kilo/kilo.db`).
